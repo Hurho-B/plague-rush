@@ -7,13 +7,20 @@ public class RunnerGenerator : MonoBehaviour
     public class Cell
     {
         public bool visited = false;
-        public bool[] status = new bool[4];
+        public int[] direction = { 0, 0 };
     }
 
-    public Vector2 size;
-    public Vector2 offset;
-    public int startPos = 0;
+    [Header("Debug")]
+    [Tooltip("The length of the generated segment.")]
+    public Vector2 size; // Working on converting this into an int
+    [Tooltip("The # of units each room's center is seperated by.")]
+    public int offset;
+    [Header("Prefabs")]
+    [Tooltip("Used for standard path segments.")]
     public GameObject room;
+    [Tooltip("Used for puzzle rooms at the end of each path.")]
+    public GameObject endPiece;
+
 
     List<Cell> board;
 
@@ -52,18 +59,22 @@ public class RunnerGenerator : MonoBehaviour
         //   existing generators may be culled
         for (int i = 0; i < size.x; i++)
         {
-            // New rooms need to be placed in accordance to "NorthSouth"
-            // bool relative of the previous room. "If statement"?
-            for (int j = 0; j < size.y; j++)
+            Cell currentCell = board[i];
+            int[] grid = { 0, 0 };
+
+            if (i != 0)
             {
-                Cell currentCell = board[Mathf.FloorToInt(i + j * size.x)];
-
-                RoomBehaviour newRoom = Instantiate(room, new Vector3(1 * offset.x, 0, i * offset.y), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
-                newRoom.UpdateRoom(currentCell.status);
-
-                newRoom.name += " " + i + "-" + j;
             }
 
+            for (int j = 0; j < size.y; j++)
+                {
+                    
+                    RoomBehaviour newRoom = Instantiate(room, new Vector3(currentCell.Item1 * offset, 0, currentCell.Item2 * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
+                    newRoom.UpdateRoom(currentCell.direction);
+
+                    newRoom.name += " " + i;
+                }
+            grid += board.direction[i];
         }
     }
 
@@ -76,9 +87,11 @@ public class RunnerGenerator : MonoBehaviour
             board.Add(new Cell());
         }
 
+        board[0].direction = new { 0, 1 };
+
         for (int i = 0; i < size.x; i++)
         {
-            int currentCell = startPos;
+            int currentCell = 0;
             Stack<int> path = new Stack<int>();
             int k = 0;
             while (k < 1000)
