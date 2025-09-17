@@ -173,7 +173,7 @@ public class playerMovement : MonoBehaviour
 
     private void Slide()
     {
-        if (Input.GetKeyDown(KeyCode.S) && !sliding)
+        if (Input.GetKeyDown(KeyCode.S) && !sliding && isGrounded()) 
         {
             sliding = true;
             playerAnimation.SetBool("Sliding", true);
@@ -188,7 +188,7 @@ public class playerMovement : MonoBehaviour
 
     IEnumerator SlideStop()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
         sliding = false;
         CollideSlide[] slides = FindObjectsOfType<CollideSlide>();
         foreach (var s in slides)

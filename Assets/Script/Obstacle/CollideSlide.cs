@@ -6,16 +6,22 @@ using UnityEngine.SceneManagement;
 public class CollideSlide : MonoBehaviour
 {
     private Collider col;
+    private Menu menuScript;
+    private playerMovement playerMovementScript;
     private void Start()
     {
         col = GetComponent<Collider>();
+       
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
         {
+            menuScript = GameObject.Find("Canvas").GetComponent<Menu>();
             //nothing much just reset.-- will need to add more 
-            SceneManager.LoadScene(0);
+            playerMovementScript = collision.gameObject.GetComponent<playerMovement>();
+            playerMovementScript.enabled = false;
+            menuScript.OpenLosePage();
         }
     }
 
