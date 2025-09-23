@@ -8,8 +8,9 @@ public class RoomBehaviour : MonoBehaviour
     public GameObject[] floor;
     public GameObject[] wall;
 
-    private int[] direction = {0,0};
+    private int[] direction = { 0, 0 };
     private bool visited = false;
+    private bool occupied = false;
 
     // direction { x, z}
     // North     { 0, 1}
@@ -20,15 +21,10 @@ public class RoomBehaviour : MonoBehaviour
     // Checks to make per 60 frames
     public void FixedUpdate()
     {
-        if (visited)
+        if (visited && !occupied)
         {
-            // Delete room after it's been visited
+            Destroy(transform);
         }
-    }
-
-    public int getDirection()
-    {
-        return direction;
     }
 
     // Status list oudated, update parameters

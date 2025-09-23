@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void checkGrid()
+    public int[] checkGrid()
     {
         return grid;
     }
