@@ -6,7 +6,13 @@ using UnityEngine.EventSystems;
 public class DropWires : MonoBehaviour, IDropHandler
 {
     private DragWires dragWiresScript;
+    private WiresComplete wirePageScript;
     public string gameObjectName;
+
+    private void Start()
+    {
+        wirePageScript = GetComponentInParent<WiresComplete>();
+    }
     public void OnDrop(PointerEventData eventData)
     {
         
@@ -18,6 +24,7 @@ public class DropWires : MonoBehaviour, IDropHandler
             dragWiresScript.dragInSlot = true;
             // Snap to this drop zone
             eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
+            wirePageScript.WireDone();
         }
     }
 }

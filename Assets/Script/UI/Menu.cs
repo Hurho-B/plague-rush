@@ -19,9 +19,14 @@ public class Menu : MonoBehaviour
 
     [Header("Start Page")]
     public GameObject startPage;
+
+    private void Start()
+    {
+        Cursor.visible = true;
+    }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && playerScript.enabled == true)
         {
             if (pageOpen)
             {
@@ -71,6 +76,8 @@ public class Menu : MonoBehaviour
         //make delay to make it look better 
         playerScript.enabled = true;
         startPage.SetActive(false);
+        //Hide Cursor
+        Cursor.visible = false;
         StartCoroutine(Delay());
     }
 
