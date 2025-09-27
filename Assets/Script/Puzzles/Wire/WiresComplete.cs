@@ -5,14 +5,21 @@ using UnityEngine;
 public class WiresComplete : MonoBehaviour
 {
     public int howManyWiresCompleted;
-    public GameObject wirePage;
+    private PuzzleManager puzzleManagerScript;
 
-    public void WireDone()
+    private void Start()
+    {
+        puzzleManagerScript = GetComponentInParent<PuzzleManager>();
+    }
+
+    public void WireDone() // all 4 wires completed 
     {
         howManyWiresCompleted++;
         if(howManyWiresCompleted == 4)
         {
-            wirePage.SetActive(false);
+            //tell puzzle manager that  it his completed 
+            puzzleManagerScript.FinishActivePuzzle();
+            gameObject.SetActive(false);
         }
     }
 }

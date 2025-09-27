@@ -6,11 +6,13 @@ public class PuzzleStart : MonoBehaviour
 {
     public GameObject player;
     public GameObject canvas;
+    private PuzzleManager puzzleManagerScript;
     private playerMovement playerScript;
 
-    private void Start()
+    private void Start() //activating whichever puzzle
     {
         playerScript = player.GetComponent<playerMovement>();
+        puzzleManagerScript = canvas.GetComponent<PuzzleManager>();
     }
 
 
@@ -20,7 +22,9 @@ public class PuzzleStart : MonoBehaviour
         {
             playerScript.enabled = false;
             Cursor.visible = true;
-            canvas.SetActive(true);
+            // let puzzle manager handle it 
+            puzzleManagerScript.startPuzzle();
+            puzzleManagerScript.player = player;
         }
     }
 }
