@@ -99,18 +99,21 @@ public class RunnerGenerator : MonoBehaviour
         // Checking all prior cells to see if any are adjacent
         for (int i = 0; i < cell; i++)
         {
-                // direction { x, z}
-                // North     { 0, 1}
-                // South     { 0,-1}
-                // East      { 1, 0}
-                // West      {-1, 0}
-            if ((board[i].grid[1] + 1) == board[cell].grid[1])
+            // direction { x, z}
+            // North     { 0, 1}
+            // South     { 0,-1}
+            // East      { 1, 0}
+            // West      {-1, 0}
+            var pastCell = board[i].grid;
+            var currCell = board[cell].grid;
+            
+            if ((pastCell[1] - 1) == currCell[1] && pastCell[0] == currCell[0])
             { neighbors.Remove("North"); }
-            if ((board[i].grid[0] + 1) == board[cell].grid[0])
+            if ((pastCell[0] - 1) == currCell[0] && pastCell[1] == currCell[1])
             { neighbors.Remove("East"); }
-            if ((board[i].grid[1] - 1) == board[cell].grid[1])
+            if ((pastCell[1] + 1) == currCell[1] && pastCell[0] == currCell[0])
             { neighbors.Remove("South"); }
-            if ((board[i].grid[0] - 1) == board[cell].grid[0])
+            if ((pastCell[0] + 1) == currCell[0] && pastCell[1] == currCell[1])
             { neighbors.Remove("West"); }
         }
 
@@ -123,10 +126,12 @@ public class RunnerGenerator : MonoBehaviour
         Hashtable validDir = CheckNeighbors(cell);
         int [] direction = new int[] { 0, 0 };
         int[] pastCellDir = board[cell - 1].direction;
-        int doTurn = Random.Range(0, 10);
+        int doTurn = Random.Range(0, 11);
 
+        string directions = "";
         foreach (DictionaryEntry key in validDir)
-            print(key.Key);
+            directions += key.Key+" ";
+        print(directions);
 
         // Checking if the path is going North/South already
         if (pastCellDir[1] != 0)
