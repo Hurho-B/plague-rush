@@ -4,25 +4,33 @@ using UnityEngine;
 
 public class RoomBehaviour : MonoBehaviour
 {
-    public bool North_South;
     public GameObject[] obstacle;
     public GameObject[] floor;
-    private bool beenVisited = false;
+    public GameObject[] wall;
 
-    // North-South  East-West
-    // 1            0
+    private int[] direction = { 0, 0 };
+    private bool visited = false;
+    private bool occupied = false;
+
+    // direction { x, z}
+    // North     { 0, 1}
+    // South     { 0,-1}
+    // East      { 1, 0}
+    // West      {-1, 0}
 
     // Checks to make per 60 frames
     public void FixedUpdate()
     {
-        if (beenVisited)
+        if (visited && !occupied)
         {
-            // Delete room after it's been visited
+            Destroy(transform);
         }
     }
 
-    public void UpdateRoom(bool[] status)
+    // Status list oudated, update parameters
+    public void UpdateRoom(int[] dir)
     {
+        direction = dir;
         // 3 types of obstacles need to be implemented:
         // - Objects to jump over
         // - Objects to slide under
