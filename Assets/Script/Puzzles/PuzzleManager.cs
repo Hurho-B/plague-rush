@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class PuzzleManager : MonoBehaviour
 {
-    [SerializeField] GameObject wirePage;
+    [SerializeField] GameObject[] puzzlePage;
     [SerializeField] GameObject timerPage;
-    [SerializeField] GameObject puzzle2;// not done the other puzzles 
-    [SerializeField] GameObject puzzle3;
-    [SerializeField] GameObject puzzle4;
+    private GameObject puzzleChosen;
+    int i = 0;//for the array
 
     public GameObject player; //leave empty in engine
     private Timer timerScript;
@@ -34,9 +33,14 @@ public class PuzzleManager : MonoBehaviour
         if(puzzleNeededFinish != howManyPuzzleFinish)
         {
             //need to randomize which spawn or activated
+            
             //for now
-            wirePage.SetActive(true);
+            
+            puzzlePage[i].SetActive(true);
+            puzzleChosen = puzzlePage[i];
+
             timerPage.SetActive(true);
+            i++;
         }
         else
         {
@@ -48,6 +52,7 @@ public class PuzzleManager : MonoBehaviour
     public void FinishActivePuzzle()
     {
         howManyPuzzleFinish++;
+        Debug.Log(howManyPuzzleFinish);
         SpawnPuzzle();
     }
      private void AllPuzzleFinish()
@@ -69,8 +74,13 @@ public class PuzzleManager : MonoBehaviour
 
     public  void ClosePages()
     {
-        wirePage.SetActive(false);
+        puzzleChosen.SetActive(false);
         timerPage.SetActive(false);
+    }
+
+    void MixedPuzzles() //Will need to definitively change this 
+    {
+
     }
 
 }
