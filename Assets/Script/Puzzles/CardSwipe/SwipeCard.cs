@@ -12,6 +12,8 @@ public class SwipeCard : MonoBehaviour,IPointerDownHandler,IDragHandler,IEndDrag
     public bool drop;
     private bool dragging;
     public float timer;
+    public float maxOffsets;
+    public float minOffsets;
 
     private void Start()
     {
@@ -32,7 +34,6 @@ public class SwipeCard : MonoBehaviour,IPointerDownHandler,IDragHandler,IEndDrag
         if (dragging)
         {
             timer = timer + Time.deltaTime;
-            Debug.Log(timer);
         }
     }
     public void OnDrag(PointerEventData eventData)
@@ -44,7 +45,7 @@ public class SwipeCard : MonoBehaviour,IPointerDownHandler,IDragHandler,IEndDrag
             rectMovement.anchoredPosition += new Vector2(eventData.delta.x / canvas.scaleFactor, 0f);
 
             // Clamp X movement
-            float clampedX = Mathf.Clamp(rectMovement.anchoredPosition.x, -1, 1452);
+            float clampedX = Mathf.Clamp(rectMovement.anchoredPosition.x, minOffsets, maxOffsets);
             rectMovement.anchoredPosition = new Vector2(clampedX, rectMovement.anchoredPosition.y);
         }
     }

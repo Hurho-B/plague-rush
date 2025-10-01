@@ -19,6 +19,7 @@ public class PuzzleManager : MonoBehaviour
     private void Start()
     {
         timerScript = gameObject.GetComponent<Timer>();
+        MixedPuzzles(puzzlePage);
     }
 
     public void startPuzzle()
@@ -44,15 +45,14 @@ public class PuzzleManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Stop all puzzles");
             AllPuzzleFinish();
         }
     }
 
     public void FinishActivePuzzle()
     {
+        puzzlePage[i - 1].SetActive(false);
         howManyPuzzleFinish++;
-        Debug.Log(howManyPuzzleFinish);
         SpawnPuzzle();
     }
      private void AllPuzzleFinish()
@@ -78,9 +78,17 @@ public class PuzzleManager : MonoBehaviour
         timerPage.SetActive(false);
     }
 
-    void MixedPuzzles() //Will need to definitively change this 
+    void MixedPuzzles(GameObject[] array) //Will need to definitively change this. need to randomize which one are activated yes which spawn out of all the 5 then they are the one to do
     {
+        for (int i = array.Length - 1; i > 0; i--)
+        {
+            int randomIndex = Random.Range(0, i + 1);
 
+            //swapping
+            GameObject temp = array[i];
+            array[i] = array[randomIndex];
+            array[randomIndex] = temp;
+        }
     }
 
 }

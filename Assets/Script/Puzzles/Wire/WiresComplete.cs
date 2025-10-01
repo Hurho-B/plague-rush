@@ -19,7 +19,6 @@ public class WiresComplete : MonoBehaviour
         {
             //tell puzzle manager that  it his completed 
             puzzleManagerScript.FinishActivePuzzle();
-            gameObject.SetActive(false);
         }
     }
 }

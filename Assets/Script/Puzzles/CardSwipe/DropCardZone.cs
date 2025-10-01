@@ -8,6 +8,8 @@ public class DropCardZone : MonoBehaviour,IDropHandler
     private SwipeCard cardScript;
     private Vector2 startPosition;
     public PuzzleManager puzzleManagerScript;
+    public float minTimer;
+    public float maxTimer;
 
     private void Start()
     {
@@ -18,14 +20,14 @@ public class DropCardZone : MonoBehaviour,IDropHandler
     {
         if (data.pointerDrag != null)
         {
-            Debug.Log("Dropped object was: " + data.pointerDrag);
             GameObject droppedObject = data.pointerDrag;
             //check how long it took is to fast or to slow 
             if (droppedObject != null)
             {
                 cardScript = droppedObject.GetComponent<SwipeCard>();
+                Debug.Log(cardScript.timer);
                 //see how long it took to drag at the end 
-                if (cardScript.timer is >= 0.1f and <= 4f)
+                if (cardScript.timer is >= 0.8f and <= 1.2f)
                 {
                     //perfect time ---
                     if (cardScript != null)
