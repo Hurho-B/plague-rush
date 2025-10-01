@@ -18,6 +18,8 @@ public class RunnerGenerator : MonoBehaviour
     public int pathLength;
     [Tooltip("The # of units each room's center is seperated by.")]
     public int offset;
+    [Tooltip("The chance a turn should happen when legal.")]
+    public int turnWeight;
     [Header("Prefabs")]
     [Tooltip("Used for standard path segments.")]
     public GameObject room;
@@ -71,9 +73,18 @@ public class RunnerGenerator : MonoBehaviour
         board.Add(new Cell());
         board[0].direction = new int[] { 0, 1 };
         for (int i = 1; i < pathLength; i++)
+        { board.Add(new Cell()); }
+
+        for (int i = 1; i < pathLength; i++)
         {
-            board.Add(new Cell());
+            var pCell = board[i - 1];
+
+            board[i].visited = true;
             board[i].direction = PickDirection(i);
+            board[i].grid = new int[] { pCell.grid[0] + pCell.direction[0],
+                pCell.grid[1] + pCell.direction[1] };
+
+
         }
         GeneratePath();
     }
@@ -84,17 +95,22 @@ public class RunnerGenerator : MonoBehaviour
         neighbors.Add("North", new int[] { 0, 1 });
         neighbors.Add("East",  new int[] { 1, 0 });
         neighbors.Add("South", new int[] { 0,-1 });
-        neighbors.Add("West",  new int[] {-1, 0 }); 
+        neighbors.Add("West",  new int[] {-1, 0 });
         // Checking all prior cells to see if any are adjacent
-        for (int i = 1; i < cell; i++)
+        for (int i = 0; i < cell; i++)
         {
-            if ((board[i].grid[1] - 1) == board[cell].grid[1])
-            { neighbors.Remove("North"); }
-            if ((board[i].grid[0] - 1) == board[cell].grid[0])
-            { neighbors.Remove("East"); }
+                // direction { x, z}
+                // North     { 0, 1}
+                // South     { 0,-1}
+                // East      { 1, 0}
+                // West      {-1, 0}
             if ((board[i].grid[1] + 1) == board[cell].grid[1])
-            { neighbors.Remove("South"); }
+            { neighbors.Remove("North"); }
             if ((board[i].grid[0] + 1) == board[cell].grid[0])
+            { neighbors.Remove("East"); }
+            if ((board[i].grid[1] - 1) == board[cell].grid[1])
+            { neighbors.Remove("South"); }
+            if ((board[i].grid[0] - 1) == board[cell].grid[0])
             { neighbors.Remove("West"); }
         }
 
@@ -104,53 +120,108 @@ public class RunnerGenerator : MonoBehaviour
 
     int[] PickDirection(int cell)
     {
-        int[] direction = new int[] { 0, 0 };
-        int turnWeight = 10;
-
-        board[cell].grid = new int[] { (board[cell-1].direction[0] + grid[0]), (board[cell-1].direction[1] + grid[1]) };
-        // bool doTurn = false;
-        // int turnVal = Random.Range(1, 100);
-        // if (turnWeight > turnVal)
-        // { doTurn = true; }
-
-        // If statement is checking if the direction is
-        // going along the X-axis
         Hashtable validDir = CheckNeighbors(cell);
-        if (board[cell].direction[0] != 0)
+        int [] direction = new int[] { 0, 0 };
+        int[] pastCellDir = board[cell - 1].direction;
+        int doTurn = Random.Range(0, 10);
+
+        foreach (DictionaryEntry key in validDir)
+            print(key.Key);
+
+        // Checking if the path is going North/South already
+        if (pastCellDir[1] != 0)
         {
-            int pastCellDir = board[cell - 1].direction[0];
-            // Checking if we're facing East, else West
-            if (pastCellDir == 1)
+            print("We're going North/South!");
+            // Checking if we're facing North, else South
+            if (pastCellDir[1] == 1)
             {
-                if (!validDir.ContainsKey("East"))
+                if (validDir.ContainsKey("North") && doTurn < turnWeight)
                 { direction = new int[] { 0, 1 }; }
+                else
+                {
+                    if (validDir.ContainsKey("East") && validDir.ContainsKey("West"))
+                    {
+                        if (Random.Range(0, 2) == 0)
+                            direction = new int[] { 1, 0 };
+                        else
+                            direction = new int[] { -1, 0 };
+                    }
+                    else if (validDir.ContainsKey("East"))
+                    { direction = new int[] { 1, 0 }; }
+                    else
+                    { direction = new int[] { -1, 0 }; }
+                }
             }
             else
             {
-                if (!validDir.ContainsKey("West"))
-                { direction = new int[] { 0, 1 }; }
+                if (validDir.ContainsKey("South") && doTurn < turnWeight)
+                { direction = new int[] { 0, -1 }; }
+                else
+                {
+                    if (validDir.ContainsKey("East") && validDir.ContainsKey("West"))
+                    {
+                        if (Random.Range(0, 2) == 0)
+                            direction = new int[] { 1, 0 };
+                        else
+                            direction = new int[] { -1, 0 };
+                    }
+                    else if (validDir.ContainsKey("East"))
+                    { direction = new int[] { 1, 0 }; }
+                    else
+                    { direction = new int[] { -1, 0 }; }
+                }
             }
         }
-        // If not along the X-axis, check it against the
-        // Zed-Axis
-        else if (board[cell].direction[1] != 0)
+        else if (pastCellDir[0] != 0)
         {
-            int pastCellDir = board[cell - 1].direction[1];
-            // Checking if we're facing North, else South
-            if (pastCellDir == 1)
+            print("We're going East/West!");
+            // Checking if we're facing East, else West
+            if (pastCellDir[0] == 1)
             {
-                if (!validDir.ContainsKey("North"))
+                if (validDir.ContainsKey("East") && doTurn < turnWeight)
                 { direction = new int[] { 1, 0 }; }
+                else
+                {
+                    if (validDir.ContainsKey("North") && validDir.ContainsKey("South"))
+                    {
+                        if (Random.Range(0, 2) == 0)
+                            direction = new int[] { 0, 1 };
+                        else
+                            direction = new int[] { 0, -1 };
+                    }
+                    else if (validDir.ContainsKey("North"))
+                    { direction = new int[] { 0, 1 }; }
+                    else
+                    { direction = new int[] { 0, -1 }; }
+                }
             }
             else
             {
-                if (!validDir.ContainsKey("South"))
-                { direction = new int[] { 1, 0 }; }
+                if (validDir.ContainsKey("West") && doTurn < turnWeight)
+                { direction = new int[] { -1, 0 }; }
+                else
+                {
+                    if (validDir.ContainsKey("North") && validDir.ContainsKey("South"))
+                    {
+                        if (Random.Range(0, 2) == 0)
+                            direction = new int[] { 0, 1 };
+                        else
+                            direction = new int[] { 0, -1 };
+                    }
+                    else if (validDir.ContainsKey("North"))
+                    { direction = new int[] { 0, 1 }; }
+                    else
+                    { direction = new int[] { 0, -1 }; }
+                }
             }
         }
         // If neither, then this is the first cell and
         // a direction must be initialized, default North
-        else { direction = new int[] { 0, 1 }; }
+        else
+        {
+            print("Hit the failsafe assignment!");
+            direction = new int[] { 0, 1 };
+        }
 
         return direction;
     }

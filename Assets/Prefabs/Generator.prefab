@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: {x: 12, y: 1}
+  pathLength: 0
   offset: 15
-  startPos: 0
+  turnWeight: 2
   room: {fileID: 5014622509304553406, guid: 4b41e2ece6f419bd3b1ee5259ad3e280, type: 3}
+  endPiece: {fileID: 0}
