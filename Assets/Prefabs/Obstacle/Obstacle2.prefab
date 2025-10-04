@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 6269770732267003577}
   - component: {fileID: 8318339381763865580}
   - component: {fileID: 2447500107321297264}
-  - component: {fileID: 7013078280460320610}
+  - component: {fileID: 5912305330031157473}
   m_Layer: 0
   m_Name: Obstacle2
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 78.52, y: 71.28, z: 38.65}
-  m_LocalScale: {x: 17.869207, y: 2.7538621, z: 1}
+  m_LocalScale: {x: 24.573734, y: 2.7538621, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7013078280460320610
+--- !u!114 &5912305330031157473
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

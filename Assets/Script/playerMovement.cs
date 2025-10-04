@@ -26,6 +26,7 @@ public class playerMovement : MonoBehaviour
     [Header("Jump / Gravity")]
     public float jumpForce = 12f;
     public float extraGravity = 20f;         //if not fly forever
+    private float extraGravityClone;
     public LayerMask groundLayer;
     public Transform groundCheck;
     public float groundCheckRadius = 0.15f;
@@ -46,8 +47,6 @@ public class playerMovement : MonoBehaviour
         playerAnimation = GetComponent<Animator>();
         // Start base position whichever axix needed
         basePosition = xActivated ? transform.position.x : transform.position.z;
-        //Hide Cursor
-        Cursor.visible = false;
     }
 
     void Update()
@@ -152,11 +151,15 @@ public class playerMovement : MonoBehaviour
     private void Jump()
     {
         //Add force 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded() && !sliding)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
         {
             //make sure y 0 for safety 
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            if (sliding)
+            {
+                StoppingSlide();
+            }
         }
     }
     private void GiveExtraGrav()// make the jumping feel good  --- if not player fly 
@@ -164,6 +167,13 @@ public class playerMovement : MonoBehaviour
         if (!isGrounded())
         {
             rb.AddForce(Vector3.down * extraGravity);
+        }
+        else
+        {
+            if(extraGravity != 20)
+            {
+                extraGravity = 20;
+            }
         }
     }
     bool isGrounded()//check touch floor 
@@ -173,8 +183,13 @@ public class playerMovement : MonoBehaviour
 
     private void Slide()
     {
-        if (Input.GetKeyDown(KeyCode.S) && !sliding)
+        if (Input.GetKeyDown(KeyCode.S) && !sliding) 
         {
+            if (!isGrounded())
+            {
+                extraGravityClone = extraGravity;
+                extraGravity = extraGravity* 2;
+            }
             sliding = true;
             playerAnimation.SetBool("Sliding", true);
             CollideSlide[] slides = FindObjectsOfType<CollideSlide>();
@@ -188,7 +203,11 @@ public class playerMovement : MonoBehaviour
 
     IEnumerator SlideStop()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.8f);
+        StoppingSlide();
+    }
+    void StoppingSlide()
+    {
         sliding = false;
         CollideSlide[] slides = FindObjectsOfType<CollideSlide>();
         foreach (var s in slides)
@@ -229,12 +248,7 @@ public class playerMovement : MonoBehaviour
         allowLeftTurn = allowRightTurn = false;
     }
 
-    // Manually cancel if we need---- probably will not use 
-    public void TurnOff()
-    {
-        isWaitingForTurnInput = false;
-        allowLeftTurn = allowRightTurn = false;
-    }
+
     //swipe movement if change to subway surfer
     /*  private void FixedUpdate()   subway surfer movement
       {
