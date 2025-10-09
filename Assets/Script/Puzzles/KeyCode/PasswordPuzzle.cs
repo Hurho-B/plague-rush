@@ -59,6 +59,13 @@ public class PasswordPuzzle : MonoBehaviour
             playerNbUI[index].text = playerNumbers[index].ToString();
         }
     }
+    void HideNumbers()
+    {
+        for(int i = 0;i < playerNbUI.Length; i++)
+        {
+            playerNbUI[i].text = "".ToString();
+        }
+    }
 
     void CheckifSuccess()
     {
@@ -96,5 +103,6 @@ public class PasswordPuzzle : MonoBehaviour
             playerNumbers[i] = -1;
         }
         currentIndex = 0;
+        HideNumbers();
     }
 }
