@@ -7,12 +7,14 @@ public class lightPuzzle : MonoBehaviour
 {
     public Image[] lightColor;
     public int[] orderNb;
-    private int maxNb = 5;
+    private int maxNb = 4;
     private int nbTimedone;
     public GameObject blockClick;
+    public PuzzleManager puzzleManagerScript;
     // Start is called before the first frame update
     void Start()
     {
+        puzzleManagerScript = GetComponentInParent<PuzzleManager>();
         StartCoroutine(ShowColor());
     }
 
@@ -49,12 +51,13 @@ public class lightPuzzle : MonoBehaviour
         if (whichButtton == orderNb[nbTimedone])
         {
             nbTimedone++;
+            StartCoroutine(showClickColor(whichButtton));
             //if all correct you did it 
             if (nbTimedone == maxNb)
             {
                 Debug.Log("You Win");
                 nbTimedone = 0;
-                
+                puzzleManagerScript.FinishActivePuzzle();
             }
         }
         else
@@ -64,6 +67,16 @@ public class lightPuzzle : MonoBehaviour
             blockClick.SetActive(true);
             StartCoroutine(ShowColor());
         }
+    }
+
+    IEnumerator showClickColor(int whichButton) // just to make it look better 
+    {
+        Color currentColor = lightColor[whichButton].color;
+        Color startColor = currentColor;
+        currentColor.a = 1;
+        lightColor[whichButton].color = currentColor;
+        yield return new WaitForSeconds(0.2f);
+        lightColor[whichButton].color = startColor;
     }
 }
 

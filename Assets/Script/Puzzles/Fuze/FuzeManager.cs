@@ -11,6 +11,7 @@ public class FuzeManager : MonoBehaviour
     public GameObject parentGameobject;
     [SerializeField] int ypos = 122;
     trashDropZone trashScript;
+    public PuzzleManager puzzleManagerScript;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,7 +47,7 @@ public class FuzeManager : MonoBehaviour
         {
             script.ResetPosition(transform); // Replace with your actual method or logic
         }
-        parentGameobject.SetActive(false);
+        puzzleManagerScript.FinishActivePuzzle();
     }
 }
 

@@ -859,7 +859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &195189792
 RectTransform:
   m_ObjectHideFlags: 0
@@ -946,7 +946,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 2136811717}
   canDrag: 0
-  fix: 0
+  fix: 1
   dropInDropZone: 0
 --- !u!114 &197465423
 MonoBehaviour:
@@ -2018,7 +2018,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 85, y: 10}
+  m_AnchoredPosition: {x: 108, y: 10}
   m_SizeDelta: {x: 100, y: 223.4909}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &311453698
@@ -3918,7 +3918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.89475346, g: 1, b: 0, a: 0.7137255}
+  m_Color: {r: 0.89475346, g: 1, b: 0, a: 0.4745098}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4737,7 +4737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.33102894, b: 1, a: 0.7137255}
+  m_Color: {r: 0, g: 0.33102894, b: 1, a: 0.4745098}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6206,7 +6206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.7137255}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.4745098}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6494,7 +6494,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 274, y: 10}
+  m_AnchoredPosition: {x: 298, y: 10}
   m_SizeDelta: {x: 100, y: 223.4909}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &686687953
@@ -9941,7 +9941,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 84, y: 10}
+  m_AnchoredPosition: {x: 108, y: 10}
   m_SizeDelta: {x: 100, y: 223.4909}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1003117166
@@ -17591,10 +17591,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2018380167}
-  - {fileID: 311453697}
-  - {fileID: 1160694545}
   - {fileID: 955639127}
+  - {fileID: 1160694545}
+  - {fileID: 311453697}
+  - {fileID: 2018380167}
   - {fileID: 1025377884}
   - {fileID: 1838350306}
   - {fileID: 1003117165}
@@ -17622,6 +17622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentGameobject: {fileID: 1996034871}
   ypos: 122
+  puzzleManagerScript: {fileID: 2136811721}
 --- !u!1 &1737548427
 GameObject:
   m_ObjectHideFlags: 0
@@ -19071,7 +19072,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.20195055, a: 0.7137255}
+  m_Color: {r: 0, g: 1, b: 0.20195055, a: 0.4745098}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19210,8 +19211,9 @@ MonoBehaviour:
   - {fileID: 1878012935}
   - {fileID: 559863676}
   - {fileID: 504969175}
-  orderNb: 0000000000000000000000000000000000000000
+  orderNb: 00000000000000000000000000000000
   blockClick: {fileID: 1216355493}
+  puzzleManagerScript: {fileID: 0}
 --- !u!1 &1903934985
 GameObject:
   m_ObjectHideFlags: 0
@@ -19896,7 +19898,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1996034872
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20154,7 +20156,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 273.6, y: 10}
+  m_AnchoredPosition: {x: 299, y: 10}
   m_SizeDelta: {x: 100, y: 223.4909}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2018380168
@@ -21326,6 +21328,8 @@ MonoBehaviour:
   - {fileID: 1537309431}
   - {fileID: 106333506}
   - {fileID: 1671501555}
+  - {fileID: 1996034871}
+  - {fileID: 1890407643}
   timerPage: {fileID: 444950297}
   player: {fileID: 0}
   puzzleNeededFinish: 3
