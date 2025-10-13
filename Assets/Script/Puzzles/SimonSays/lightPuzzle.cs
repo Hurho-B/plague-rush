@@ -10,7 +10,7 @@ public class lightPuzzle : MonoBehaviour
     private int maxNb = 4;
     private int nbTimedone;
     public GameObject blockClick;
-    public PuzzleManager puzzleManagerScript;
+    private PuzzleManager puzzleManagerScript;
     // Start is called before the first frame update
     void Start()
     {
