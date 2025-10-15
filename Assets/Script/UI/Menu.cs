@@ -20,6 +20,9 @@ public class Menu : MonoBehaviour
     [Header("Start Page")]
     public GameObject startPage;
 
+    [Header("Timeline")]
+    public GameObject cutscene;
+
     private void Start()
     {
         Cursor.visible = true;
@@ -74,7 +77,7 @@ public class Menu : MonoBehaviour
     public void OnClickStart()
     {
         //make delay to make it look better 
-        playerScript.enabled = true;
+        cutscene.SetActive(true);
         startPage.SetActive(false);
         //Hide Cursor
         Cursor.visible = false;
@@ -83,7 +86,9 @@ public class Menu : MonoBehaviour
 
     IEnumerator Delay()
     {
-        yield return new WaitForSeconds(1.4f);
+        yield return new WaitForSeconds(5.4f);
+        cutscene.SetActive(false);
+        playerScript.enabled = true;
         playerCam.SetActive(true);
         startCam.SetActive(false);
     }
