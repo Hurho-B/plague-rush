@@ -5,23 +5,30 @@ using UnityEngine.SceneManagement;
 
 public class CollideObstacle : MonoBehaviour
 {
-    private playerMovement playerMovementScript;
-    private Menu menuScript;
-
-    private void Start()
-    {
-        
-    }
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
-            menuScript = GameObject.Find("Canvas").GetComponent<Menu>();
-            playerMovementScript = collision.gameObject.GetComponent<playerMovement>();
-            //nothing much just reset.-- will need to add more 
-            // SceneManager.LoadScene(0);
-            playerMovementScript.enabled = false;
-            menuScript.OpenLosePage();
+            // Get the audio controller and call the death sound method directly
+            PlayerAudioController audioController = collision.gameObject.GetComponent<PlayerAudioController>();
+            if (audioController != null)
+            {
+                audioController.PlayDeathSound();
+            }
+
+            // Get other components and disable movement
+            playerMovement playerMovementScript = collision.gameObject.GetComponent<playerMovement>();
+            Menu menuScript = GameObject.Find("Canvas").GetComponent<Menu>();
+
+            if (playerMovementScript != null)
+            {
+                playerMovementScript.enabled = false;
+            }
+
+            if (menuScript != null)
+            {
+                menuScript.OpenLosePage();
+            }
         }
     }
 }
