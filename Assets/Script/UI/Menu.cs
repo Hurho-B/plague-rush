@@ -9,6 +9,8 @@ public class Menu : MonoBehaviour
     public GameObject playerCam;//set active for these 2
     public GameObject startCam;
 
+    public float timer;
+
     bool pageOpen = false;
 
     [Header("Pause Menu")]
@@ -77,17 +79,20 @@ public class Menu : MonoBehaviour
     public void OnClickStart()
     {
         //make delay to make it look better 
-        cutscene.SetActive(true);
+        if (cutscene)
+        {
+            cutscene.SetActive(true);
+        }
         startPage.SetActive(false);
         //Hide Cursor
         Cursor.visible = false;
-        StartCoroutine(Delay());
+        StartCoroutine(Delay(timer));
     }
 
-    IEnumerator Delay()
+    IEnumerator Delay(float time)
     {
-        yield return new WaitForSeconds(5.4f);
-        cutscene.SetActive(false);
+        yield return new WaitForSeconds(time);
+        if(cutscene) cutscene.SetActive(false);
         playerScript.enabled = true;
         playerCam.SetActive(true);
         startCam.SetActive(false);

@@ -21784,6 +21784,7 @@ MonoBehaviour:
   playerScript: {fileID: 969406643}
   playerCam: {fileID: 1832532954}
   startCam: {fileID: 1823190851}
+  timer: 5.4
   pausePage: {fileID: 1426735134}
   losePage: {fileID: 1666705388}
   startPage: {fileID: 195189791}

@@ -9602,6 +9602,10 @@ PrefabInstance:
       value: Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 3134835017659987160, guid: 2f653264449e1ba419521171df5068eb, type: 3}
+      propertyPath: timer
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3134835017659987160, guid: 2f653264449e1ba419521171df5068eb, type: 3}
       propertyPath: startCam
       value: 
       objectReference: {fileID: 1823190851}
