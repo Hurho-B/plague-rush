@@ -4645,8 +4645,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: 9b5c31e70bdaec84a893d9e7ea6f7bce, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -4741,11 +4741,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 9b5c31e70bdaec84a893d9e7ea6f7bce, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 42e8f83bc1b1bf748872e5b3ee225047, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -4837,9 +4837,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 55f0df2a80c609147964ff02fcb662be, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 172980cd6054c0a42bd69132441ecc25, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4936,9 +4936,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMovementScript: {fileID: 969406643}
+  obstacleScript: {fileID: 1292996248}
   maxSpeedAudioSource: {fileID: 969406650}
   slideAudioSource: {fileID: 969406649}
-  deathAudioSource: {fileID: 969406649}
+  deathAudioSource: {fileID: 969406648}
 --- !u!1 &976143227
 GameObject:
   m_ObjectHideFlags: 0
@@ -6051,6 +6052,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6702075700584297995, guid: 375de3e5869f8004c82c0d75f978b982, type: 3}
   m_PrefabInstance: {fileID: 1801815790}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1292996248 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5807186991684369521, guid: 375de3e5869f8004c82c0d75f978b982, type: 3}
+  m_PrefabInstance: {fileID: 1801815790}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8817c167e4377343a052be2758cc51a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1310369411 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8009215106339109775, guid: a0f44953f32279c45bfe8968e549b253, type: 3}

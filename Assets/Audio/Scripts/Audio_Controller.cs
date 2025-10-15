@@ -8,39 +8,68 @@ public class PlayerAudioController : MonoBehaviour
     public playerMovement playerMovementScript; // Drag your playerMovement script here
 
     [Header("Audio Sources")]
-    public AudioSource maxSpeedAudioSource; // Plays when reaching forward speed
+    public AudioSource maxSpeedAudioSource; // Plays when reaching actual movement speed of 20
     public AudioSource slideAudioSource;    // Plays when sliding
     public AudioSource deathAudioSource;    // Plays when player dies
 
     private bool maxSpeedAudioPlayed = false;
     private bool wasSliding = false;
-    private bool isAlive = true;
+    private bool wasAtMaxSpeed = false;
+    private float previousActualSpeed = 0f;
+    private bool gameStarted = false;
+    private Vector3 lastPosition;
+    private bool isDead = false;
+
+    void Start()
+    {
+        lastPosition = transform.position;
+    }
 
     void Update()
     {
-        if (playerMovementScript != null && isAlive)
+        if (playerMovementScript != null && !isDead)
         {
-            CheckMaxSpeedAudio();
+            float actualSpeed = CalculateActualSpeed();
+            CheckMaxSpeedAudio(actualSpeed);
             CheckSlideAudio();
         }
     }
 
-    void CheckMaxSpeedAudio()
+    // Public method that obstacle can call directly
+    public void PlayDeathSound()
     {
-        // Use reflection to access the forwardSpeed field
-        System.Type type = playerMovementScript.GetType();
-        System.Reflection.FieldInfo forwardSpeedField = type.GetField("forwardSpeed", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-
-        if (forwardSpeedField != null)
+        if (!isDead)
         {
-            float forwardSpeed = (float)forwardSpeedField.GetValue(playerMovementScript);
-
-            // Play audio once when forward speed is reached and audio hasn't played yet
-            if (forwardSpeed >= 20f && !maxSpeedAudioPlayed)
-            {
-                PlayMaxSpeedAudio();
-            }
+            TriggerDeath();
         }
+    }
+
+    float CalculateActualSpeed()
+    {
+        // Calculate actual movement speed based on position change
+        float distanceMoved = Vector3.Distance(transform.position, lastPosition);
+        float actualSpeed = distanceMoved / Time.deltaTime;
+        lastPosition = transform.position;
+        return actualSpeed;
+    }
+
+    void CheckMaxSpeedAudio(float actualSpeed)
+    {
+        // Only start checking once game has actually started (speed > 0)
+        if (actualSpeed > 0.1f && !gameStarted)
+        {
+            gameStarted = true;
+        }
+
+        // Play audio once when actual speed reaches 20 and audio hasn't played yet
+        if (actualSpeed >= 20f && !maxSpeedAudioPlayed && gameStarted)
+        {
+            PlayMaxSpeedAudio();
+            wasAtMaxSpeed = true;
+        }
+
+        // Update previous speed for death detection
+        previousActualSpeed = actualSpeed;
     }
 
     void CheckSlideAudio()
@@ -74,7 +103,7 @@ public class PlayerAudioController : MonoBehaviour
         {
             maxSpeedAudioSource.Play();
             maxSpeedAudioPlayed = true;
-            Debug.Log("Max speed audio played!");
+            Debug.Log("Max speed audio played! Actual movement speed reached 20");
         }
     }
 
@@ -87,16 +116,15 @@ public class PlayerAudioController : MonoBehaviour
         }
     }
 
-    // Call this method when the player dies (from your game manager or death detection script)
-    public void PlayDeathAudio()
+    void TriggerDeath()
     {
-        if (deathAudioSource != null && isAlive)
+        if (!isDead && deathAudioSource != null)
         {
+            isDead = true;
             deathAudioSource.Play();
-            isAlive = false;
-            Debug.Log("Death audio played!");
+            Debug.Log("Death audio played! Player hit obstacle");
 
-            // Stop other audio sources when player dies
+            // Stop other audio sources when death occurs
             if (maxSpeedAudioSource != null && maxSpeedAudioSource.isPlaying)
                 maxSpeedAudioSource.Stop();
             if (slideAudioSource != null && slideAudioSource.isPlaying)
@@ -104,11 +132,21 @@ public class PlayerAudioController : MonoBehaviour
         }
     }
 
-    // Reset audio states when player respawns
+    // Call this method when your UI start button is clicked
+    public void StartGame()
+    {
+        gameStarted = true;
+        isDead = false;
+        ResetAudio();
+    }
+
+    // Reset audio states (call this when player respawns)
     public void ResetAudio()
     {
         maxSpeedAudioPlayed = false;
-        isAlive = true;
+        wasAtMaxSpeed = false;
+        previousActualSpeed = 0f;
+        isDead = false;
 
         if (maxSpeedAudioSource != null && maxSpeedAudioSource.isPlaying)
             maxSpeedAudioSource.Stop();
