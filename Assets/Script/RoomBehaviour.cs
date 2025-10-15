@@ -6,7 +6,7 @@ public class RoomBehaviour : MonoBehaviour
 {
     public GameObject[] obstacle;
     public GameObject[] floor;
-    public GameObject[] wall;
+    public GameObject[] walls;
 
     private int[] direction = { 0, 0 };
     private bool visited = false;
@@ -28,15 +28,13 @@ public class RoomBehaviour : MonoBehaviour
     }
 
     // Status list oudated, update parameters
-    public void UpdateRoom(int[] dir)
+    public void UpdateRoom(bool[] status)
     {
-        direction = dir;
-        // 3 types of obstacles need to be implemented:
-        // - Objects to jump over
-        // - Objects to slide under
-        // - Objects to go around
-        //
-        // 
+        for (int i = 0; i < status.Length; i++)
+        {
+            // doors[i].SetActive(status[i]);
+            walls[i].SetActive(!status[i]);
+        }
     }
 
 }
