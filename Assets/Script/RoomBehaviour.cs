@@ -7,8 +7,8 @@ public class RoomBehaviour : MonoBehaviour
     public GameObject[] obstacle;
     public GameObject[] floor;
     public GameObject[] walls;
+    public GameObject corner;
 
-    private int[] direction = { 0, 0 };
     private bool visited = false;
     private bool occupied = false;
 
@@ -30,11 +30,11 @@ public class RoomBehaviour : MonoBehaviour
     // Status list oudated, update parameters
     public void UpdateRoom(bool[] status)
     {
-        for (int i = 0; i < status.Length; i++)
+        for (int i = 0; i < 4; i++)
         {
-            // doors[i].SetActive(status[i]);
             walls[i].SetActive(!status[i]);
         }
+        corner.SetActive(status[4]);
     }
 
 }
