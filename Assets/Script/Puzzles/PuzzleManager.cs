@@ -5,65 +5,80 @@ using UnityEngine;
 public class PuzzleManager : MonoBehaviour
 {
     [SerializeField] GameObject[] puzzlePage;
+    [SerializeField] GameObject[] puzzleObject;
     [SerializeField] GameObject timerPage;
+    public Transform[] puzzlePosition;
     private GameObject puzzleChosen;
-    int i = 0;//for the array
 
-    public GameObject player; //leave empty in engine
+    public GameObject player;
+    private GameObject playerCamera;
+    private GameObject playerCameraFpp;
+
     private Timer timerScript;
 
     //puzzle count
     private int howManyPuzzleFinish;
     public int puzzleNeededFinish;
 
+    //make sure can only do one puzzle at a time
+    public bool puzzleActive = false;
+
     private void Start()
     {
         timerScript = gameObject.GetComponent<Timer>();
-        MixedPuzzles(puzzlePage);
+        MixedPuzzles(puzzleObject); 
     }
 
     public void startPuzzle()
     {
         //start timer
         timerScript.startTimer();
+        PlayerIs(false);
         SpawnPuzzle();
     }
     public void SpawnPuzzle()
     {
-        //need an if to check if we spawn another
-        if(puzzleNeededFinish != howManyPuzzleFinish)
-        {
-            //need to randomize which spawn or activated
-            
-            //for now
-            
-            puzzlePage[i].SetActive(true);
-            puzzleChosen = puzzlePage[i];
 
-            timerPage.SetActive(true);
-            i++;
-        }
-        else
+        timerPage.SetActive(true);
+        //Instantiate spawn the first 3 
+        for (int i = 0; i < 3; i++)
         {
-            AllPuzzleFinish();
+            GameObject spawnObject = Instantiate(puzzleObject[i]);
+            spawnObject.transform.position = puzzlePosition[i].position;
+            ClickableObject clickObjScript = spawnObject.GetComponent<ClickableObject>();
+            clickObjScript.GetPuzzleManager(this);
         }
+    }
+
+    public void SpawnPuzzleUI(int index)
+    {
+        puzzleActive = true;
+        //for now
+        puzzlePage[index].SetActive(true);
+        puzzleChosen = puzzlePage[index]; 
     }
 
     public void FinishActivePuzzle()
     {
-        puzzlePage[i - 1].SetActive(false);
+        puzzleChosen.SetActive(false);
         howManyPuzzleFinish++;
-        SpawnPuzzle();
+        puzzleActive = false;
+        if (puzzleNeededFinish == howManyPuzzleFinish)
+        {
+            AllPuzzleFinish();
+        }
     }
      private void AllPuzzleFinish()
     {
         timerScript.StopTimer(false);
         ClosePages();
+
+        //Destroys objects
+
         //make player move
-        playerMovement plaScript = player.GetComponent<playerMovement>();
-        plaScript.enabled = true;
-        plaScript.forwardSpeed += 3;
+        PlayerIs(true);
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
         //make wall move
         GameObject wall = GameObject.FindWithTag("EndWALL");
         Destroy(wall);
@@ -78,7 +93,7 @@ public class PuzzleManager : MonoBehaviour
         timerPage.SetActive(false);
     }
 
-    void MixedPuzzles(GameObject[] array) //Will need to definitively change this. need to randomize which one are activated yes which spawn out of all the 5 then they are the one to do
+    void MixedPuzzles(GameObject[] array) //no need will change now 
     {
         for (int i = array.Length - 1; i > 0; i--)
         {
@@ -88,6 +103,28 @@ public class PuzzleManager : MonoBehaviour
             GameObject temp = array[i];
             array[i] = array[randomIndex];
             array[randomIndex] = temp;
+        }
+    }
+
+    //Player stuff
+    void PlayerIs(bool enabled)
+    {
+        if (enabled)
+        {
+            playerMovement plaScript = player.GetComponent<playerMovement>();
+            plaScript.enabled = true;
+            plaScript.forwardSpeed += 3;
+            playerCamera.SetActive(true);
+            playerCameraFpp.SetActive(false);
+        }
+        else
+        {
+            Transform playerCameraTP = player.transform.Find("PlayerCamera");
+            Transform playerCameraFP = player.transform.Find("PlayerCameraFP");
+            playerCamera = playerCameraTP.gameObject;
+            playerCameraFpp = playerCameraFP.gameObject;
+            playerCamera.SetActive(false);
+            playerCameraFpp.SetActive(true);
         }
     }
 

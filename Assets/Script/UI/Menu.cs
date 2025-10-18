@@ -55,6 +55,7 @@ public class Menu : MonoBehaviour
         pageOpen = false;
         Time.timeScale = 1f;
         pausePage.SetActive(false);
+        Cursor.visible = false;
     }
 
     public void OpenLosePage()
@@ -62,6 +63,7 @@ public class Menu : MonoBehaviour
         pageOpen = false;
         losePage.SetActive(true);
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
     public void OnClickRestart()
     {
@@ -81,6 +83,7 @@ public class Menu : MonoBehaviour
         startPage.SetActive(false);
         //Hide Cursor
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
         StartCoroutine(Delay());
     }
 
