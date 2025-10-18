@@ -34,6 +34,7 @@ public class SwipeCard : MonoBehaviour,IPointerDownHandler,IDragHandler,IEndDrag
         if (dragging)
         {
             timer = timer + Time.deltaTime;
+        //  Debug.Log(timer);
         }
     }
     public void OnDrag(PointerEventData eventData)
@@ -42,11 +43,14 @@ public class SwipeCard : MonoBehaviour,IPointerDownHandler,IDragHandler,IEndDrag
         {
             dragging = true;
 
-            rectMovement.anchoredPosition += new Vector2(eventData.delta.x / canvas.scaleFactor, 0f);
+            float newx = rectMovement.anchoredPosition.x + eventData.delta.x / canvas.scaleFactor;
 
-            // Clamp X movement
-            float clampedX = Mathf.Clamp(rectMovement.anchoredPosition.x, minOffsets, maxOffsets);
-            rectMovement.anchoredPosition = new Vector2(clampedX, rectMovement.anchoredPosition.y);
+            if(newx > rectMovement.anchoredPosition.x) {
+
+                // Clamp X movement
+                float clampedX = Mathf.Clamp(newx, minOffsets, maxOffsets);
+                rectMovement.anchoredPosition = new Vector2(clampedX, rectMovement.anchoredPosition.y);
+            }
         }
     }
 

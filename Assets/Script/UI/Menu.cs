@@ -9,8 +9,6 @@ public class Menu : MonoBehaviour
     public GameObject playerCam;//set active for these 2
     public GameObject startCam;
 
-    public float timer;
-
     bool pageOpen = false;
 
     [Header("Pause Menu")]
@@ -57,6 +55,7 @@ public class Menu : MonoBehaviour
         pageOpen = false;
         Time.timeScale = 1f;
         pausePage.SetActive(false);
+        Cursor.visible = false;
     }
 
     public void OpenLosePage()
@@ -64,6 +63,7 @@ public class Menu : MonoBehaviour
         pageOpen = false;
         losePage.SetActive(true);
         Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
     public void OnClickRestart()
     {
@@ -79,20 +79,18 @@ public class Menu : MonoBehaviour
     public void OnClickStart()
     {
         //make delay to make it look better 
-        if (cutscene)
-        {
-            cutscene.SetActive(true);
-        }
+        cutscene.SetActive(true);
         startPage.SetActive(false);
         //Hide Cursor
         Cursor.visible = false;
-        StartCoroutine(Delay(timer));
+        Cursor.lockState = CursorLockMode.Confined;
+        StartCoroutine(Delay());
     }
 
-    IEnumerator Delay(float time)
+    IEnumerator Delay()
     {
-        yield return new WaitForSeconds(time);
-        if(cutscene) cutscene.SetActive(false);
+        yield return new WaitForSeconds(5.4f);
+        cutscene.SetActive(false);
         playerScript.enabled = true;
         playerCam.SetActive(true);
         startCam.SetActive(false);

@@ -10,6 +10,7 @@ public class DropCardZone : MonoBehaviour,IDropHandler
     public PuzzleManager puzzleManagerScript;
     public float minTimer;
     public float maxTimer;
+    private float distance;
 
     private void Start()
     {
@@ -25,9 +26,11 @@ public class DropCardZone : MonoBehaviour,IDropHandler
             if (droppedObject != null)
             {
                 cardScript = droppedObject.GetComponent<SwipeCard>();
-                Debug.Log(cardScript.timer);
+                distance = cardScript.maxOffsets - cardScript.minOffsets;
+                float swipeSpeed = distance / cardScript.timer;
+                Debug.Log(swipeSpeed);
                 //see how long it took to drag at the end 
-                if (cardScript.timer is >= 0.8f and <= 1.2f)
+                if (swipeSpeed is >= 520 and <= 620f)
                 {
                     //perfect time ---
                     if (cardScript != null)
