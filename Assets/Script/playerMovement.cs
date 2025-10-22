@@ -166,7 +166,6 @@ public class playerMovement : MonoBehaviour
     {
         if (!isGrounded())
         {
-            Debug.Log("Add extra force ");
             rb.AddForce(Vector3.down * extraGravity);
         }
         else

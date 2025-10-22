@@ -9,6 +9,8 @@ public class PuzzleStart : MonoBehaviour
     private PuzzleManager puzzleManagerScript;
     private playerMovement playerScript;
     private Transform[] spawnLocation;
+    private Transform playerLocation;
+    public GameObject timeline;
 
     private void Start() //activating whichever puzzle
     {
@@ -19,6 +21,11 @@ public class PuzzleStart : MonoBehaviour
 
         for (int i = 0; i < childCount; i++)
         {
+            if(i == 3)
+            {
+                playerLocation = transform.GetChild(i).gameObject.transform;
+                break;
+            }
             spawnLocation[i] = transform.GetChild(i).gameObject.transform;//get child without assigning
         }
     }
@@ -29,14 +36,28 @@ public class PuzzleStart : MonoBehaviour
         if(collision.gameObject.tag == "Player")
         {
             player = collision.gameObject;
-            playerScript = player.GetComponent<playerMovement>();
-            playerScript.enabled = false;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
             // let puzzle manager handle it 
-            puzzleManagerScript.player = player;
-            puzzleManagerScript.puzzlePosition = spawnLocation;
-            puzzleManagerScript.startPuzzle();          
+            StartCutscene();
         }
+    }
+
+    void StartCutscene()
+    {
+        playerScript = player.GetComponent<playerMovement>();
+        playerScript.enabled = false;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        timeline.SetActive(true);
+        StartCoroutine(PuzzleStarting());
+    }
+
+    IEnumerator PuzzleStarting()
+    {
+        yield return new WaitForSeconds(3f);
+        player.transform.position = playerLocation.position;
+        puzzleManagerScript.player = player;
+        puzzleManagerScript.puzzlePosition = spawnLocation;
+        puzzleManagerScript.startPuzzle();
+        this.gameObject.SetActive(false);
     }
 }
