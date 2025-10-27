@@ -7,10 +7,14 @@ public class PlayerAudioController : MonoBehaviour
     [Header("Player Movement Reference")]
     public playerMovement playerMovementScript; // Drag your playerMovement script here
 
+    [Header("Menu Reference")]
+    public Menu menuScript; // Drag your Menu script here
+
     [Header("Audio Sources")]
     public AudioSource maxSpeedAudioSource; // Plays when reaching actual movement speed of 20
     public AudioSource slideAudioSource;    // Plays when sliding
     public AudioSource deathAudioSource;    // Plays when player dies
+    public AudioSource jumpAudioSource;     // Plays when player jumps
 
     private bool maxSpeedAudioPlayed = false;
     private bool wasSliding = false;
@@ -23,15 +27,22 @@ public class PlayerAudioController : MonoBehaviour
     void Start()
     {
         lastPosition = transform.position;
+
+        // If menu script is not assigned, try to find it
+        if (menuScript == null)
+        {
+            menuScript = FindObjectOfType<Menu>();
+        }
     }
 
     void Update()
     {
-        if (playerMovementScript != null && !isDead)
+        if (playerMovementScript != null && !isDead && gameStarted)
         {
             float actualSpeed = CalculateActualSpeed();
             CheckMaxSpeedAudio(actualSpeed);
             CheckSlideAudio();
+            CheckJumpInput();
         }
     }
 
@@ -97,6 +108,15 @@ public class PlayerAudioController : MonoBehaviour
         }
     }
 
+    void CheckJumpInput()
+    {
+        // Only check for jump input after game has started
+        if (gameStarted && Input.GetKeyDown(KeyCode.Space))
+        {
+            PlayJumpAudio();
+        }
+    }
+
     void PlayMaxSpeedAudio()
     {
         if (maxSpeedAudioSource != null)
@@ -116,6 +136,15 @@ public class PlayerAudioController : MonoBehaviour
         }
     }
 
+    void PlayJumpAudio()
+    {
+        if (jumpAudioSource != null)
+        {
+            jumpAudioSource.Play();
+            Debug.Log("Jump audio played!");
+        }
+    }
+
     void TriggerDeath()
     {
         if (!isDead && deathAudioSource != null)
@@ -129,6 +158,8 @@ public class PlayerAudioController : MonoBehaviour
                 maxSpeedAudioSource.Stop();
             if (slideAudioSource != null && slideAudioSource.isPlaying)
                 slideAudioSource.Stop();
+            if (jumpAudioSource != null && jumpAudioSource.isPlaying)
+                jumpAudioSource.Stop();
         }
     }
 
@@ -152,5 +183,7 @@ public class PlayerAudioController : MonoBehaviour
             maxSpeedAudioSource.Stop();
         if (slideAudioSource != null && slideAudioSource.isPlaying)
             slideAudioSource.Stop();
+        if (jumpAudioSource != null && jumpAudioSource.isPlaying)
+            jumpAudioSource.Stop();
     }
 }
