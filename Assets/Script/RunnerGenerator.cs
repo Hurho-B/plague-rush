@@ -28,23 +28,14 @@ public class RunnerGenerator : MonoBehaviour
     public GameObject endPiece;
 
     List<Cell> board;
-    int iteration = 0;
     bool lastTurnRight = true;
-    int numOfSameTurns = 0;
+    int numOfSameTurns = 1;
     int[] grid = { 0, 0 };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         PathGenerator();
-        if (iteration > 0)
-        {
-            // Later on, use this to transfer grid and
-            // direction information into the future
-            // generator iterations.
-            // 
-            // Is this neccessary?
-        }
     }
 
     // Update is called once per frame
@@ -64,7 +55,7 @@ public class RunnerGenerator : MonoBehaviour
             newRoom.UpdateRoom(currentCell.status);
             newRoom.name += " " + i;
 
-            // Update grid for GameManager script
+            // Update grid for future cell placements
             gridSpace[0] += currentCell.direction[0];
             gridSpace[1] += currentCell.direction[1];
         }
@@ -86,7 +77,7 @@ public class RunnerGenerator : MonoBehaviour
             var pCell = board[i - 1];
             int[] newDir;
 
-            if (i % segmentLength == 0)
+            if (i % segmentLength == 0 && i != segmentLength)
             { newDir = MakeTurnCheck(i); }
             else
             { newDir = GrabDir(i, -1); }
@@ -105,10 +96,11 @@ public class RunnerGenerator : MonoBehaviour
         int[] direction = { 0, 0 };
         int[] pCell = board[cell - 1].direction;
         int doTurn = Random.Range(0, 11);
+        Debug.Log("Cell " + cell + " | " +numOfSameTurns);
+
 
         // This if/else block acts as a fail-safe, checking for straight
         // paths and if a turn needs to happen in the other direction.
-        print(doTurn + ":" + turnWeight);
         if (doTurn < turnWeight)
         {
             if (pCell[0] == 0)
@@ -121,7 +113,7 @@ public class RunnerGenerator : MonoBehaviour
                 board[cell].status[1] = true;
                 board[cell].status[3] = true;
             }
-            return board[cell - 1].direction;
+            return pCell;
         }
         else if (lastTurnRight && numOfSameTurns >= 2)
         {
@@ -141,7 +133,6 @@ public class RunnerGenerator : MonoBehaviour
         // 0 = Turn Left
         // 1 = Turn Right
         doTurn = Random.Range(0, 2);
-        print(doTurn);
         if (doTurn == 0)
         {
             if (lastTurnRight == false)
@@ -183,6 +174,9 @@ public class RunnerGenerator : MonoBehaviour
         //
         // Refer to RoomBehaviour.cs for cardinal key. These must be numerical
         // to modify the grid later.
+        // -1 = Same Direction
+        //  0 = Turn Left
+        //  1 = Turn Right
         if (turnDir == -1)
         {
             if (pDir[0] == 0)
@@ -205,30 +199,30 @@ public class RunnerGenerator : MonoBehaviour
             {
                 if (turnDir == 0)
                 {
-                    newDir = new int[] { 1, 0 };
-                    board[cell].status[2] = true;
-                    board[cell].status[1] = true;
-                }
-                else if (turnDir == 1)
-                {
                     newDir = new int[] { -1, 0 };
                     board[cell].status[2] = true;
                     board[cell].status[3] = true;
+                }
+                else if (turnDir == 1)
+                {
+                    newDir = new int[] { 1, 0 };
+                    board[cell].status[2] = true;
+                    board[cell].status[1] = true;
                 }
             }
             else if (pDir[1] == -1)
             {
                 if (turnDir == 0)
                 {
-                    newDir = new int[] { -1, 0 };
+                    newDir = new int[] { 1, 0 };
+                    board[cell].status[0] = true;
                     board[cell].status[1] = true;
-                    board[cell].status[3] = true;
                 }
                 else if (turnDir == 1)
                 {
-                    newDir = new int[] { 1, 0 };
-                    board[cell].status[1] = true;
-                    board[cell].status[1] = true;
+                    newDir = new int[] { -1, 0 };
+                    board[cell].status[0] = true;
+                    board[cell].status[3] = true;
                 }
             }
         }
