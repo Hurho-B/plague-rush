@@ -96,7 +96,7 @@ public class playerMovement : MonoBehaviour
                 rb.MoveRotation(targetRotation);
                 turning = false;
 
-                // Toggle axis (we turn 90°, so axis flips)
+                // Toggle axis (we turn 90ï¿½, so axis flips)
                 xActivated = !xActivated;
 
                 // set the new base position, to center player 
@@ -166,7 +166,7 @@ public class playerMovement : MonoBehaviour
     {
         if (!isGrounded())
         {
-            Debug.Log("Add extra force ");
+            // Debug.Log("Add extra force ");
             rb.AddForce(Vector3.down * extraGravity);
         }
         else
