@@ -11,6 +11,7 @@ public class PuzzleStart : MonoBehaviour
     private Transform[] spawnLocation;
     private Transform playerLocation;
     public GameObject timeline;
+    public GameObject cutsceneCamera;
 
     private void Start() //activating whichever puzzle
     {
@@ -47,6 +48,8 @@ public class PuzzleStart : MonoBehaviour
         playerScript.enabled = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        cutsceneCamera.SetActive(true);
         timeline.SetActive(true);
         StartCoroutine(PuzzleStarting());
     }
