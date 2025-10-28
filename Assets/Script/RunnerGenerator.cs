@@ -7,15 +7,16 @@ public class RunnerGenerator : MonoBehaviour
     public class Cell
     {
         public bool visited = false;
+        public bool[] status = new bool[5];
         public int[] direction = { 0, 0 };
         public int[] grid = { 0, 0 };
     }
 
     [Header("Debug")]
-    [Tooltip("The size of the workable space.")]
-    public Vector2 size; // Working on converting this into an int
     [Tooltip("The length of the path.")]
     public int pathLength;
+    [Tooltip("The length of a segment.")]
+    public int segmentLength;
     [Tooltip("The # of units each room's center is seperated by.")]
     public int offset;
     [Tooltip("The chance a turn should happen when legal.")]
@@ -27,19 +28,14 @@ public class RunnerGenerator : MonoBehaviour
     public GameObject endPiece;
 
     List<Cell> board;
-    int iteration = 0;
+    bool lastTurnRight = true;
+    int numOfSameTurns = 1;
     int[] grid = { 0, 0 };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         PathGenerator();
-        if (iteration > 0)
-        {
-            // Later on, use this to transfer grid and
-            // direction information into the future
-            // generator iterations.
-        }
     }
 
     // Update is called once per frame
@@ -56,10 +52,10 @@ public class RunnerGenerator : MonoBehaviour
             // Build room segments
             Cell currentCell = board[i];
             RoomBehaviour newRoom = Instantiate(room, new Vector3(gridSpace[0] * offset, 0, gridSpace[1] * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
-            newRoom.UpdateRoom(currentCell.direction);
+            newRoom.UpdateRoom(currentCell.status);
             newRoom.name += " " + i;
 
-            // Update grid for GameManager script
+            // Update grid for future cell placements
             gridSpace[0] += currentCell.direction[0];
             gridSpace[1] += currentCell.direction[1];
         }
@@ -70,165 +66,201 @@ public class RunnerGenerator : MonoBehaviour
         // Generating the workable area, check against the board
         // before adding a Cell to the path.
         board = new List<Cell>();
-        board.Add(new Cell());
-        board[0].direction = new int[] { 0, 1 };
-        for (int i = 1; i < pathLength; i++)
+        for (int i = 0; i < pathLength; i++)
         { board.Add(new Cell()); }
+        board[0].grid = new int[] { 0, 0 };
+        board[0].direction = new int[] { 0, 1 };
+        board[0].status[0] = true;
 
         for (int i = 1; i < pathLength; i++)
         {
             var pCell = board[i - 1];
+            int[] newDir;
 
-            board[i].visited = true;
-            board[i].direction = PickDirection(i);
+            if (i % segmentLength == 0 && i != segmentLength)
+            { newDir = MakeTurnCheck(i); }
+            else
+            { newDir = GrabDir(i, -1); }
+
+            board[i].visited = false;
+            board[i].direction = newDir;
             board[i].grid = new int[] { pCell.grid[0] + pCell.direction[0],
                 pCell.grid[1] + pCell.direction[1] };
-
-
+            // board[i].status;
         }
         GeneratePath();
     }
 
-    Hashtable CheckNeighbors(int cell)
+    int[] MakeTurnCheck(int cell)
     {
-        Hashtable neighbors = new Hashtable();
-        neighbors.Add("North", new int[] { 0, 1 });
-        neighbors.Add("East",  new int[] { 1, 0 });
-        neighbors.Add("South", new int[] { 0,-1 });
-        neighbors.Add("West",  new int[] {-1, 0 });
-        // Checking all prior cells to see if any are adjacent
-        for (int i = 0; i < cell; i++)
-        {
-            // direction { x, z}
-            // North     { 0, 1}
-            // South     { 0,-1}
-            // East      { 1, 0}
-            // West      {-1, 0}
-            var pastCell = board[i].grid;
-            var currCell = board[cell].grid;
-            
-            if ((pastCell[1] - 1) == currCell[1] && pastCell[0] == currCell[0])
-            { neighbors.Remove("North"); }
-            if ((pastCell[0] - 1) == currCell[0] && pastCell[1] == currCell[1])
-            { neighbors.Remove("East"); }
-            if ((pastCell[1] + 1) == currCell[1] && pastCell[0] == currCell[0])
-            { neighbors.Remove("South"); }
-            if ((pastCell[0] + 1) == currCell[0] && pastCell[1] == currCell[1])
-            { neighbors.Remove("West"); }
-        }
-
-        // Returns a valid 
-        return neighbors;
-    }
-
-    int[] PickDirection(int cell)
-    {
-        Hashtable validDir = CheckNeighbors(cell);
-        int [] direction = new int[] { 0, 0 };
-        int[] pastCellDir = board[cell - 1].direction;
+        int[] direction = { 0, 0 };
+        int[] pCell = board[cell - 1].direction;
         int doTurn = Random.Range(0, 11);
+        Debug.Log("Cell " + cell + " | " +numOfSameTurns);
 
-        string directions = "";
-        foreach (DictionaryEntry key in validDir)
-            directions += key.Key+" ";
-        print(directions);
 
-        // Checking if the path is going North/South already
-        if (pastCellDir[1] != 0)
+        // This if/else block acts as a fail-safe, checking for straight
+        // paths and if a turn needs to happen in the other direction.
+        if (doTurn < turnWeight)
         {
-            print("We're going North/South!");
-            // Checking if we're facing North, else South
-            if (pastCellDir[1] == 1)
+            if (pCell[0] == 0)
             {
-                if (validDir.ContainsKey("North") && doTurn < turnWeight)
-                { direction = new int[] { 0, 1 }; }
-                else
-                {
-                    if (validDir.ContainsKey("East") && validDir.ContainsKey("West"))
-                    {
-                        if (Random.Range(0, 2) == 0)
-                            direction = new int[] { 1, 0 };
-                        else
-                            direction = new int[] { -1, 0 };
-                    }
-                    else if (validDir.ContainsKey("East"))
-                    { direction = new int[] { 1, 0 }; }
-                    else
-                    { direction = new int[] { -1, 0 }; }
-                }
+                board[cell].status[0] = true;
+                board[cell].status[2] = true;
+            }
+            else if (pCell[1] == 0)
+            {
+                board[cell].status[1] = true;
+                board[cell].status[3] = true;
+            }
+            return pCell;
+        }
+        else if (lastTurnRight && numOfSameTurns >= 2)
+        {
+            lastTurnRight = false;
+            numOfSameTurns = 1;
+            return GrabDir(cell, 0);
+        }
+        else if (!lastTurnRight && numOfSameTurns >= 2)
+        {
+            lastTurnRight = true;
+            numOfSameTurns = 1;
+            return GrabDir(cell, 1);
+        }
+
+        // This block is now doing coin flips to see which turn to make
+        // and modify the appropriate variables for tracking.
+        // 0 = Turn Left
+        // 1 = Turn Right
+        doTurn = Random.Range(0, 2);
+        if (doTurn == 0)
+        {
+            if (lastTurnRight == false)
+            {
+                numOfSameTurns += 1;
             }
             else
             {
-                if (validDir.ContainsKey("South") && doTurn < turnWeight)
-                { direction = new int[] { 0, -1 }; }
-                else
-                {
-                    if (validDir.ContainsKey("East") && validDir.ContainsKey("West"))
-                    {
-                        if (Random.Range(0, 2) == 0)
-                            direction = new int[] { 1, 0 };
-                        else
-                            direction = new int[] { -1, 0 };
-                    }
-                    else if (validDir.ContainsKey("East"))
-                    { direction = new int[] { 1, 0 }; }
-                    else
-                    { direction = new int[] { -1, 0 }; }
-                }
+                lastTurnRight = false;
+                numOfSameTurns = 1;
             }
+            return GrabDir(cell, 0);
         }
-        else if (pastCellDir[0] != 0)
+        else if (doTurn == 1)
         {
-            print("We're going East/West!");
-            // Checking if we're facing East, else West
-            if (pastCellDir[0] == 1)
+            if (lastTurnRight == true)
             {
-                if (validDir.ContainsKey("East") && doTurn < turnWeight)
-                { direction = new int[] { 1, 0 }; }
-                else
-                {
-                    if (validDir.ContainsKey("North") && validDir.ContainsKey("South"))
-                    {
-                        if (Random.Range(0, 2) == 0)
-                            direction = new int[] { 0, 1 };
-                        else
-                            direction = new int[] { 0, -1 };
-                    }
-                    else if (validDir.ContainsKey("North"))
-                    { direction = new int[] { 0, 1 }; }
-                    else
-                    { direction = new int[] { 0, -1 }; }
-                }
+                numOfSameTurns += 1;
             }
             else
             {
-                if (validDir.ContainsKey("West") && doTurn < turnWeight)
-                { direction = new int[] { -1, 0 }; }
-                else
-                {
-                    if (validDir.ContainsKey("North") && validDir.ContainsKey("South"))
-                    {
-                        if (Random.Range(0, 2) == 0)
-                            direction = new int[] { 0, 1 };
-                        else
-                            direction = new int[] { 0, -1 };
-                    }
-                    else if (validDir.ContainsKey("North"))
-                    { direction = new int[] { 0, 1 }; }
-                    else
-                    { direction = new int[] { 0, -1 }; }
-                }
+                lastTurnRight = true;
+                numOfSameTurns = 1;
             }
-        }
-        // If neither, then this is the first cell and
-        // a direction must be initialized, default North
-        else
-        {
-            print("Hit the failsafe assignment!");
-            direction = new int[] { 0, 1 };
+            return GrabDir(cell, 1);
         }
 
         return direction;
+    }
+    
+    int[] GrabDir(int cell, int turnDir)
+    {
+        int[] newDir = { 0, 0 };
+        int[] pDir = board[cell - 1].direction;
+
+        // First check if the cell is going along the North/South
+        // axis, then check again to see if it's going North or South.
+        // Repeat again along the East/West axis.
+        //
+        // Refer to RoomBehaviour.cs for cardinal key. These must be numerical
+        // to modify the grid later.
+        // -1 = Same Direction
+        //  0 = Turn Left
+        //  1 = Turn Right
+        if (turnDir == -1)
+        {
+            if (pDir[0] == 0)
+            {
+                newDir = pDir;
+                board[cell].status[0] = true;
+                board[cell].status[2] = true;
+            }
+            else if (pDir[1] == 0)
+            {
+                newDir = pDir;
+                board[cell].status[1] = true;
+                board[cell].status[3] = true;
+            }
+        }
+        else if (pDir[0] == 0)
+        {
+            board[cell].status[4] = true;
+            if (pDir[1] == 1)
+            {
+                if (turnDir == 0)
+                {
+                    newDir = new int[] { -1, 0 };
+                    board[cell].status[2] = true;
+                    board[cell].status[3] = true;
+                }
+                else if (turnDir == 1)
+                {
+                    newDir = new int[] { 1, 0 };
+                    board[cell].status[2] = true;
+                    board[cell].status[1] = true;
+                }
+            }
+            else if (pDir[1] == -1)
+            {
+                if (turnDir == 0)
+                {
+                    newDir = new int[] { 1, 0 };
+                    board[cell].status[0] = true;
+                    board[cell].status[1] = true;
+                }
+                else if (turnDir == 1)
+                {
+                    newDir = new int[] { -1, 0 };
+                    board[cell].status[0] = true;
+                    board[cell].status[3] = true;
+                }
+            }
+        }
+        else if (pDir[1] == 0)
+        {
+            board[cell].status[4] = true;
+            if (pDir[0] == 1)
+            {
+                if (turnDir == 0)
+                {
+                    newDir = new int[] { 0, 1 };
+                    board[cell].status[3] = true;
+                    board[cell].status[0] = true;
+                }
+                else if (turnDir == 1)
+                {
+                    newDir = new int[] { 0, -1 };
+                    board[cell].status[3] = true;
+                    board[cell].status[2] = true;
+                }
+            }
+            else if (pDir[0] == -1)
+            {
+                if (turnDir == 0)
+                {
+                    newDir = new int[] { 0, -1 };
+                    board[cell].status[1] = true;
+                    board[cell].status[2] = true;
+                }
+                else if (turnDir == 1)
+                {
+                    newDir = new int[] { 0, 1 };
+                    board[cell].status[1] = true;
+                    board[cell].status[0] = true;
+                }
+            }
+        }
+        return newDir;
     }
 }
 
