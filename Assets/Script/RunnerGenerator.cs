@@ -39,12 +39,6 @@ public class RunnerGenerator : MonoBehaviour
         PathGenerator();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     void GeneratePath()
     {
         int[] gridSpace = grid;
