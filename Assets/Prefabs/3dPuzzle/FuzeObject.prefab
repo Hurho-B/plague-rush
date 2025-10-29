@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4375685536787128192}
   - component: {fileID: 4015592351845583109}
   - component: {fileID: 2213288242062167908}
+  - component: {fileID: 3873997521013214829}
   m_Layer: 0
   m_Name: FuzeObject
   m_TagString: Untagged
@@ -119,3 +120,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puzzleIndex: 3
+--- !u!114 &3873997521013214829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2885035195975260342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0.9823123, b: 0, a: 1}
+  outlineWidth: 6
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

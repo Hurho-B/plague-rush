@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8702461274832943510}
   - component: {fileID: 3879804273998918416}
   - component: {fileID: 1151633765582154414}
+  - component: {fileID: 3687553838484457189}
   m_Layer: 0
   m_Name: WiresObject
   m_TagString: Untagged
@@ -119,3 +120,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puzzleIndex: 0
+--- !u!114 &3687553838484457189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4642816082423967473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 0.9823123, b: 0, a: 1}
+  outlineWidth: 6
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
