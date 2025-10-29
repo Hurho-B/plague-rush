@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Running City.unity
+    guid: 4fafbd57d8e841c40b402696a98e724f
   m_configObjects: {}

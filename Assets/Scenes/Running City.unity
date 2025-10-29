@@ -48123,7 +48123,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c4be86c86ff3ee4e9e1161109adf64d, type: 2}
+  - {fileID: 2100000, guid: b3ebfd85dfd5bd444ad4f1be9dc6f4c9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -48253,7 +48253,7 @@ Transform:
   m_GameObject: {fileID: 1219896828}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00012316625, y: -0.70846915, z: -0.00012364222, w: 0.7057418}
-  m_LocalPosition: {x: -55.89, y: -0.1, z: 68.8}
+  m_LocalPosition: {x: -54.76, y: -0.1, z: 68.8}
   m_LocalScale: {x: 2.2909417, y: 1, z: 13.330577}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -84671,6 +84671,18 @@ PrefabInstance:
     - target: {fileID: 2900661716814119891, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043214872771816534, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9878711
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043214872771816534, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.15527622
+      objectReference: {fileID: 0}
+    - target: {fileID: 3043214872771816534, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 17.866
       objectReference: {fileID: 0}
     - target: {fileID: 4452271197072501030, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
       propertyPath: menuScript
