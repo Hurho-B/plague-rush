@@ -61,6 +61,7 @@ public class PuzzleStart : MonoBehaviour
         puzzleManagerScript.player = player;
         puzzleManagerScript.puzzlePosition = spawnLocation;
         puzzleManagerScript.startPuzzle();
+        timeline.SetActive(false);
         this.gameObject.SetActive(false);
     }
 }
