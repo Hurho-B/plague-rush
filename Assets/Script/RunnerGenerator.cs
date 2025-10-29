@@ -13,8 +13,8 @@ public class RunnerGenerator : MonoBehaviour
     }
 
     [Header("Debug")]
-    [Tooltip("The length of the path.")]
-    public int pathLength;
+    [Tooltip("The number of segments being generated per area.")]
+    public int numOfSegments;
     [Tooltip("The length of a segment.")]
     public int segmentLength;
     [Tooltip("The # of units each room's center is seperated by.")]
@@ -31,17 +31,12 @@ public class RunnerGenerator : MonoBehaviour
     bool lastTurnRight = true;
     int numOfSameTurns = 1;
     int[] grid = { 0, 0 };
+    int pathLength;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         PathGenerator();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void GeneratePath()
@@ -65,6 +60,7 @@ public class RunnerGenerator : MonoBehaviour
     {
         // Generating the workable area, check against the board
         // before adding a Cell to the path.
+        pathLength = numOfSegments * segmentLength;
         board = new List<Cell>();
         for (int i = 0; i < pathLength; i++)
         { board.Add(new Cell()); }
