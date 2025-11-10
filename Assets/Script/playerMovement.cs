@@ -38,6 +38,16 @@ public class playerMovement : MonoBehaviour
     private bool sliding;
     private Animator playerAnimation;
 
+    [Header("mobile control")]
+    // Swipe detection
+    private Vector2 startTouchPos;
+    private Vector2 currentTouchPos;
+    private bool stopTouch = false;
+
+    [Header("Swipe Settings")]
+    public float swipeRange = 50f; // Minimum distance in pixels to count as a swipe
+    public float tapRange = 10f;   // To prevent tap from counting as a swipe
+
 
 
 
@@ -51,13 +61,20 @@ public class playerMovement : MonoBehaviour
 
     void Update()
     {
-        //make the horzontal input mouse instead of keyboard
+#if UNITY_STANDALONE || UNITY_EDITOR
+        // Use mouse movement on PC
         float mouseX = (Input.mousePosition.x / (float)Screen.width) * 2f - 1f;
         horizontalInput = Mathf.Clamp(mouseX, -1f, 1f);
+#else
+    // Use accelerometer on mobile
+    Vector3 tilt = Input.acceleration;
+    horizontalInput = Mathf.Clamp(tilt.x * 2f, -1f, 1f); // multiply to adjust sensitivity
+#endif
 
         // A or D to turn. Can only happen when trigger collider at the choose point 
         if (isWaitingForTurnInput)
         {
+#if UNITY_STANDALONE || UNITY_EDITOR
             if (allowLeftTurn && Input.GetKeyDown(KeyCode.A))
             {
                 StartTurn(-90f); // left
@@ -66,6 +83,9 @@ public class playerMovement : MonoBehaviour
             {
                 StartTurn(90f); // right
             }
+#else
+    DetectSwipe(); // Only run on phone
+#endif
         }
         //check if player jump
         Jump();
@@ -247,6 +267,57 @@ public class playerMovement : MonoBehaviour
         
         isWaitingForTurnInput = false;
         allowLeftTurn = allowRightTurn = false;
+    }
+
+    //turning player mobile 
+    private void DetectSwipe()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    startTouchPos = touch.position;
+                    stopTouch = false;
+                    break;
+
+                case TouchPhase.Moved:
+                    currentTouchPos = touch.position;
+                    Vector2 distance = currentTouchPos - startTouchPos;
+
+                    if (!stopTouch)
+                    {
+                        if (Mathf.Abs(distance.x) > swipeRange && Mathf.Abs(distance.y) < swipeRange / 2)
+                        {
+                            // Horizontal swipe
+                            if (distance.x < 0)
+                            {
+                                // Swipe left
+                                if (isWaitingForTurnInput && allowLeftTurn)
+                                {
+                                    StartTurn(-90f);
+                                }
+                                stopTouch = true;
+                            }
+                            else if (distance.x > 0)
+                            {
+                                // Swipe right
+                                if (isWaitingForTurnInput && allowRightTurn)
+                                {
+                                    StartTurn(90f);
+                                }
+                                stopTouch = true;
+                            }
+                        }
+                    }
+                    break;
+
+                case TouchPhase.Ended:
+                    stopTouch = true;
+                    break;
+            }
+        }
     }
 
 
