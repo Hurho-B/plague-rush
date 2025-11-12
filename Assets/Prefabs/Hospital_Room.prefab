@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6976421006359985403}
   m_Layer: 0
   m_Name: ObiPattern4
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 990387295314083718}
   m_Layer: 0
   m_Name: ObiPattern10
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 1972519074453394483}
   m_Layer: 0
   m_Name: ObiPattern8
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 7042714937693586536}
   m_Layer: 0
   m_Name: ObiPattern1
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 3324345308462711920}
   m_Layer: 0
   m_Name: ObiPattern2
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -317,7 +317,7 @@ GameObject:
   - component: {fileID: 2039307206978235253}
   m_Layer: 0
   m_Name: ObiPattern3
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -418,7 +418,7 @@ GameObject:
   - component: {fileID: 945139723293761053}
   m_Layer: 0
   m_Name: Obipattern11
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -486,7 +486,7 @@ GameObject:
   - component: {fileID: 454697751627215}
   m_Layer: 0
   m_Name: ObiPattern7
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -571,7 +571,7 @@ GameObject:
   - component: {fileID: 4286225172733889649}
   m_Layer: 0
   m_Name: ObiPattern6
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -603,7 +603,7 @@ GameObject:
   - component: {fileID: 4011953245387122175}
   m_Layer: 0
   m_Name: ObiPattern9
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -678,7 +678,7 @@ GameObject:
   - component: {fileID: 7909320302066534183}
   m_Layer: 0
   m_Name: ObiPattern5
-  m_TagString: Untagged
+  m_TagString: ObstaclePack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

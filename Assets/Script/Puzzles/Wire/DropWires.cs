@@ -13,18 +13,25 @@ public class DropWires : MonoBehaviour, IDropHandler
     {
         wirePageScript = GetComponentInParent<WiresComplete>();
     }
+
     public void OnDrop(PointerEventData eventData)
     {
-        
-
         if (eventData.pointerDrag != null && eventData.pointerDrag.gameObject.name == gameObjectName)
         {
-            
             dragWiresScript = eventData.pointerDrag.gameObject.GetComponent<DragWires>();
             dragWiresScript.dragInSlot = true;
+
             // Snap to this drop zone
             eventData.pointerDrag.GetComponent<RectTransform>().position = transform.position;
+
+            // Play connect sound
+            wirePageScript.OnWireConnect();
             wirePageScript.WireDone();
+        }
+        else if (eventData.pointerDrag != null)
+        {
+            // Wrong wire - play disconnect sound
+            wirePageScript.OnWireDisconnect();
         }
     }
 }
