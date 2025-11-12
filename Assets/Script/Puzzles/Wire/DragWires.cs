@@ -10,24 +10,30 @@ public class DragWires : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private Vector3 startPosition;
     private Transform startParent;
     [SerializeField] private Canvas canvas;
-
     public bool dragInSlot; // change if drop in right slot 
     private bool isDragging = false;
-
+    private WiresComplete wirePageScript;
 
     private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
+        wirePageScript = GetComponentInParent<WiresComplete>();
     }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         startPosition = rectTransform.position;
         startParent = transform.parent;
-
-        canvasGroup.alpha = 0.8f;   
+        canvasGroup.alpha = 0.8f;
         canvasGroup.blocksRaycasts = false;
         isDragging = true;
+
+        // Play pickup sound
+        if (wirePageScript != null)
+        {
+            wirePageScript.OnWirePickup();
+        }
     }
 
     //Drag with the mouse 
@@ -35,7 +41,6 @@ public class DragWires : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         if (!isDragging) return;
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
-
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -44,12 +49,9 @@ public class DragWires : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         {
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = true;
-
-           
             rectTransform.position = startPosition;
             transform.SetParent(startParent);
         }
         isDragging = false;
     }
-
 }
