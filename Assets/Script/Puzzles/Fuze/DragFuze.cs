@@ -12,16 +12,27 @@ public class DragFuze : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     public bool fix;
     public bool dropInDropZone;
     private CanvasGroup canvasGp;
+    private FuzeManager fuzeManagerScript;
 
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGp = GetComponent<CanvasGroup>();
         startTransform = rectTransform.anchoredPosition;
+        fuzeManagerScript = GetComponentInParent<FuzeManager>();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (canDrag)
+        {
+            // Play pickup sound
+            if (fuzeManagerScript != null)
+            {
+                fuzeManagerScript.OnFuzePickup();
+            }
+        }
+
         // Optional: Bring to front or highlight
         canvasGp.blocksRaycasts = false;
     }
@@ -48,6 +59,7 @@ public class DragFuze : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         return rectTransform;
     }
+
     public void ResetPosition(Transform parent)
     {
         transform.SetParent(parent);
@@ -55,4 +67,3 @@ public class DragFuze : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         canDrag = false;
     }
 }
-

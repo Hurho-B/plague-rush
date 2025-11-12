@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class RoomBehaviour : MonoBehaviour
 {
-    public GameObject[] obstacle;
-    public GameObject[] floor;
+    public GameObject turnCorner;
     public GameObject[] walls;
-    public GameObject corner;
 
+    // These are used to determine when to delete a room. Turnip    
     private bool visited = false;
     private bool occupied = false;
+    private GameObject[] obstaclePack;
 
     // direction { x, z}
     // North     { 0, 1}
     // South     { 0,-1}
     // East      { 1, 0}
     // West      {-1, 0}
+
+    // GameObject[] doorsLeft = GameObject.FindGameObjectsWithTag(c_doorLeft).Where(o => o.transform.parent.name == "Wall_Door_Long_01");
+
+    public void Start()
+    {
+        // obstaclePack = GameObject.FindGameObjectsWithTag("ObstaclePack");
+    }
 
     // Checks to make per 60 frames
     public void FixedUpdate()
@@ -34,7 +41,14 @@ public class RoomBehaviour : MonoBehaviour
         {
             walls[i].SetActive(!status[i]);
         }
-        corner.SetActive(status[4]);
+        turnCorner.SetActive(status[4]);
     }
 
+    public void CityTurns()
+    {
+        // status[0] = true;
+        // status[1] = true;
+        // status[2] = false;
+        // status[3] = false;
+    }
 }

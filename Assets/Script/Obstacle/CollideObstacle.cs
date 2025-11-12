@@ -18,7 +18,7 @@ public class CollideObstacle : MonoBehaviour
 
             // Get other components and disable movement
             playerMovement playerMovementScript = collision.gameObject.GetComponent<playerMovement>();
-            Menu menuScript = GameObject.Find("Canvas").GetComponent<Menu>();
+            Menu menuScript = GameObject.Find("Canvas_").GetComponent<Menu>();
 
             if (playerMovementScript != null)
             {

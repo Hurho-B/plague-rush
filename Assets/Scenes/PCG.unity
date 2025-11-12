@@ -425,6 +425,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
+      propertyPath: room
+      value: 
+      objectReference: {fileID: 5014622509304553406, guid: 4b41e2ece6f419bd3b1ee5259ad3e280, type: 3}
+    - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
       propertyPath: size.x
       value: 10
       objectReference: {fileID: 0}
@@ -439,6 +443,10 @@ PrefabInstance:
     - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
       propertyPath: pathLength
       value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
+      propertyPath: numOfSegments
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
       propertyPath: segmentLength

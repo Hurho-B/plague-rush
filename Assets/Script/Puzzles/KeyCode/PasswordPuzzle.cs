@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-
 public class PasswordPuzzle : MonoBehaviour
 {
+    [Header("Password Settings")]
     [SerializeField] int[] randomNumbers;
     [SerializeField] int[] playerNumbers;
     [SerializeField] TextMeshProUGUI[] randomNbUI;
     [SerializeField] TextMeshProUGUI[] playerNbUI;
 
+    [Header("Audio Settings")]
+    [SerializeField] AudioSource buttonPressSound;
+    [SerializeField] AudioSource wrongCodeSound;
+    [SerializeField] AudioSource correctCodeSound;
+
     int currentIndex;
-
     int howManyGood;
-
     bool canClick = true;
-
     private PuzzleManager puzzleManagerScript;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,9 +28,8 @@ public class PasswordPuzzle : MonoBehaviour
         for (int i = 0; i < randomNumbers.Length; i++)
         {
             randomNumbers[i] = Random.Range(0, 10);
-            ShowNumber(i,true);
+            ShowNumber(i, true);
         }
-
     }
 
     //click the buttons function
@@ -35,10 +37,16 @@ public class PasswordPuzzle : MonoBehaviour
     {
         if (canClick)
         {
+            // Play button press sound
+            if (buttonPressSound != null)
+            {
+                buttonPressSound.Play();
+            }
+
             if (currentIndex < playerNumbers.Length)
             {
                 playerNumbers[currentIndex] = value;
-                ShowNumber(currentIndex,false);
+                ShowNumber(currentIndex, false);
                 currentIndex++;
             }
             if (currentIndex > 3)// all slots are fill
@@ -47,7 +55,8 @@ public class PasswordPuzzle : MonoBehaviour
             }
         }
     }
-    void ShowNumber(int index,bool random)
+
+    void ShowNumber(int index, bool random)
     {
         //want to show 
         if (random)
@@ -59,9 +68,10 @@ public class PasswordPuzzle : MonoBehaviour
             playerNbUI[index].text = playerNumbers[index].ToString();
         }
     }
+
     void HideNumbers()
     {
-        for(int i = 0;i < playerNbUI.Length; i++)
+        for (int i = 0; i < playerNbUI.Length; i++)
         {
             playerNbUI[i].text = "".ToString();
         }
@@ -69,32 +79,47 @@ public class PasswordPuzzle : MonoBehaviour
 
     void CheckifSuccess()
     {
-        for(int i= 0; i < currentIndex;i++)
+        for (int i = 0; i < currentIndex; i++)
         {
-            if(playerNumbers[i] == randomNumbers[i])
+            if (playerNumbers[i] == randomNumbers[i])
             {
                 howManyGood++;
             }
             else
             {
                 howManyGood = 0;
+
+                // Play wrong code sound
+                if (wrongCodeSound != null)
+                {
+                    wrongCodeSound.Play();
+                }
+
                 ErasePlayerNumber();
                 break;
             }
         }
-        if(howManyGood == playerNumbers.Length)
+        if (howManyGood == playerNumbers.Length)
         {
             Success();
         }
-
     }
+
     void Success()
     {
         canClick = false;
         currentIndex = 0;
+
+        // Play correct code sound
+        if (correctCodeSound != null)
+        {
+            correctCodeSound.Play();
+        }
+
         //puzzle manager finish 
         puzzleManagerScript.FinishActivePuzzle();
     }
+
     void ErasePlayerNumber()
     {
         // once upon again if anything it in erase it 
