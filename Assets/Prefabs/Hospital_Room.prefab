@@ -554,23 +554,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ae20855a15b0c4b0b793d1602fe2281, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacle: []
-  floor:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  turnCorner: {fileID: 3292390665733118365}
   walls:
   - {fileID: 1458931494484961051}
   - {fileID: 7413038587812121685}
   - {fileID: 7197639256203967287}
   - {fileID: 5011012520545400554}
-  corner: {fileID: 3292390665733118365}
 --- !u!1 &5350447525268707324
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +640,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8628336313799322440
 Transform:
   m_ObjectHideFlags: 0
