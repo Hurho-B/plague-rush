@@ -6,11 +6,11 @@ public class RoomBehaviour : MonoBehaviour
 {
     public GameObject turnCorner;
     public GameObject[] walls;
-    public GameObject[] obstaclePack;
 
     // These are used to determine when to delete a room. Turnip    
     private bool visited = false;
     private bool occupied = false;
+    private GameObject[] obstaclePack;
 
     // direction { x, z}
     // North     { 0, 1}
@@ -22,7 +22,7 @@ public class RoomBehaviour : MonoBehaviour
 
     public void Start()
     {
-        obstaclePack = GameObject.FindGameObjectsWithTag("ObstaclePack");
+        // obstaclePack = GameObject.FindGameObjectsWithTag("ObstaclePack");
     }
 
     // Checks to make per 60 frames
@@ -44,4 +44,11 @@ public class RoomBehaviour : MonoBehaviour
         turnCorner.SetActive(status[4]);
     }
 
+    public void CityTurns()
+    {
+        // status[0] = true;
+        // status[1] = true;
+        // status[2] = false;
+        // status[3] = false;
+    }
 }
