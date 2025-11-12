@@ -18,6 +18,7 @@ public class FuzeManager : MonoBehaviour
     [SerializeField] AudioSource fuzeDisposedSound;
     [SerializeField] AudioSource correctPlacementSound;
     [SerializeField] AudioSource incorrectPlacementSound;
+    [SerializeField] AudioSource fuzePickupSound;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +45,15 @@ public class FuzeManager : MonoBehaviour
     {
         int i = dragScripts.Length - 1;
         dragScripts[i].canDrag = true;
+    }
+
+    // Call this when a fuse is picked up
+    public void OnFuzePickup()
+    {
+        if (fuzePickupSound != null)
+        {
+            fuzePickupSound.Play();
+        }
     }
 
     // Call this when the broken fuse is disposed in the trash
@@ -80,7 +90,7 @@ public class FuzeManager : MonoBehaviour
         //set everything to there start postion 
         foreach (DragFuze script in dragScripts)
         {
-            script.ResetPosition(transform); // Replace with your actual method or logic
+            script.ResetPosition(transform);
         }
         puzzleManagerScript.FinishActivePuzzle();
     }

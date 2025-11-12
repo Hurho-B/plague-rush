@@ -17700,7 +17700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.2784314}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -69150,6 +69150,7 @@ MonoBehaviour:
   fuzeDisposedSound: {fileID: 1704900430}
   correctPlacementSound: {fileID: 1704900429}
   incorrectPlacementSound: {fileID: 1704900428}
+  fuzePickupSound: {fileID: 0}
 --- !u!82 &1704900428
 AudioSource:
   m_ObjectHideFlags: 0
