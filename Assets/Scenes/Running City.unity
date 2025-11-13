@@ -11969,6 +11969,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: R
+  compass: 
   centerTransform: {fileID: 897456907}
 --- !u!1001 &378589587
 PrefabInstance:
@@ -39178,6 +39179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: L
+  compass: 
   centerTransform: {fileID: 1868106924}
 --- !u!1 &1128429560
 GameObject:
@@ -73807,6 +73809,18 @@ PrefabInstance:
       propertyPath: menuScript
       value: 
       objectReference: {fileID: 2136811719}
+    - target: {fileID: 4789078991211715401, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
+      propertyPath: forwardSpeed
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4789078991211715401, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
+      propertyPath: invertInputs
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4789078991211715401, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
+      propertyPath: testingSpeed
+      value: 70
+      objectReference: {fileID: 0}
     - target: {fileID: 8606158622163483654, guid: c2337cc52f9a4c7468447e4a27e4c2db, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.2

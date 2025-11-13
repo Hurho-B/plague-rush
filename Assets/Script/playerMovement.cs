@@ -6,6 +6,7 @@ public class playerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float forwardSpeed; //constant forward speed      
+    public float testingSpeed;
     public float laneChangeSpeed = 10f; //how quickly we move sideway;
     public float maxHorizontalOffset = 3f; // Limit for left/right movement
     private float horizontalInput; // from mouse or keyboard
@@ -16,6 +17,11 @@ public class playerMovement : MonoBehaviour
     private float speedRot = 360f;                // deg/sec rotation speed
     private float nextBasePosition;
     private Transform platformTransform;
+
+    //direction holder
+    public enum CompassDir { North, East, South, West }
+    public CompassDir currentDir = CompassDir.North;
+    public bool invertInputs = false;
 
     //know if movement on x or z
     bool xActivated = true;
@@ -65,6 +71,10 @@ public class playerMovement : MonoBehaviour
         // Use mouse movement on PC
         float mouseX = (Input.mousePosition.x / (float)Screen.width) * 2f - 1f;
         horizontalInput = Mathf.Clamp(mouseX, -1f, 1f);
+        if (invertInputs)
+        {
+            horizontalInput = -horizontalInput;
+        }
 #else
     // Use accelerometer on mobile
     Vector3 tilt = Input.acceleration;
@@ -77,10 +87,12 @@ public class playerMovement : MonoBehaviour
 #if UNITY_STANDALONE || UNITY_EDITOR
             if (allowLeftTurn && Input.GetKeyDown(KeyCode.A))
             {
+                currentDir = (CompassDir)(((int)currentDir + 3) % 4);
                 StartTurn(-90f); // left
             }
             else if (allowRightTurn && Input.GetKeyDown(KeyCode.D))
             {
+                currentDir = (CompassDir)(((int)currentDir + 1) % 4);
                 StartTurn(90f); // right
             }
 #else
@@ -123,7 +135,7 @@ public class playerMovement : MonoBehaviour
                 basePosition = nextBasePosition;
 
                 // Snap the player axis 
-                if (xActivated)
+                if (currentDir == CompassDir.North || currentDir == CompassDir.South)
                 {
                     transform.position = new Vector3(basePosition, transform.position.y, transform.position.z);
                 }
@@ -146,9 +158,8 @@ public class playerMovement : MonoBehaviour
         Vector3 forwardDisp = transform.forward * forwardSpeed * Time.fixedDeltaTime;
         if(!turning)
         {
-
             // x or z movement
-            if (xActivated)
+            if (currentDir == CompassDir.North || currentDir == CompassDir.South)
             {
                 float unclampedTargetX = transform.position.x + horizontalInput * laneChangeSpeed * Time.fixedDeltaTime;
                 float clampedTargetX = Mathf.Clamp(unclampedTargetX, basePosition - maxHorizontalOffset, basePosition + maxHorizontalOffset);
@@ -167,6 +178,17 @@ public class playerMovement : MonoBehaviour
                 rb.MovePosition(targetPos);
             }
         }
+    }
+    private void InvertInputs()
+    {
+        switch (currentDir)
+        {
+            case CompassDir.North: invertInputs = false; break;
+            case CompassDir.East: invertInputs = true; break;
+            case CompassDir.South: invertInputs = true; break;
+            case CompassDir.West: invertInputs = false; break;
+        }
+
     }
     private void Jump()
     {
@@ -250,17 +272,21 @@ public class playerMovement : MonoBehaviour
     // Turning player 
     private void StartTurn(float turnAngle)
     {
+        InvertInputs();
         // left or right location 
         Vector3 currentEuler = transform.eulerAngles;
         currentEuler.y += turnAngle;
         targetRotation = Quaternion.Euler(currentEuler);
 
         // new base position
-        if (xActivated)
+        if (currentDir == CompassDir.East || currentDir == CompassDir.West)
+        {
             nextBasePosition = platformTransform.position.z;
+        }
         else
+        {
             nextBasePosition = platformTransform.position.x;
-
+        }
 
         turning = true;
 
