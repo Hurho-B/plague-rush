@@ -25,8 +25,8 @@ public class FuzeManager : MonoBehaviour
     {
         trashScript = GetComponentInChildren<trashDropZone>();
         dragScripts = GetComponentsInChildren<DragFuze>();
-        RectTransform rect = GameObject.Find("BrokenFuze").GetComponent<RectTransform>();
-        brokenFuzePos = rect;
+      //  RectTransform rect = GameObject.Find("BrokenFuze").GetComponent<RectTransform>();
+    //    brokenFuzePos = rect;
         ChooseWhichIsBroken();
     }
 
@@ -35,6 +35,7 @@ public class FuzeManager : MonoBehaviour
     {
         int i = Random.Range(0, dragScripts.Length - 1);
         dragScripts[i].canDrag = true;
+        dragScripts[i].brokenFuzeSwap();
         brokenFuzePos.anchoredPosition = dragScripts[i].GetRectTransform().anchoredPosition;
         Vector2 pos = brokenFuzePos.anchoredPosition;
         pos.y = ypos;

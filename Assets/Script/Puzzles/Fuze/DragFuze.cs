@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DragFuze : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     private RectTransform rectTransform;
     private Vector2 startTransform;
+    public Image Imagesprite;
+    public Sprite brokenImage;
     public Canvas canvas;
     public bool canDrag;
     public bool fix;
@@ -65,5 +68,10 @@ public class DragFuze : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         transform.SetParent(parent);
         rectTransform.anchoredPosition = startTransform;
         canDrag = false;
+    }
+
+    public void brokenFuzeSwap()
+    {
+        Imagesprite.sprite = brokenImage;
     }
 }
