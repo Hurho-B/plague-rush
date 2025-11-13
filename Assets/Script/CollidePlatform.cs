@@ -6,6 +6,7 @@ public class CollidePlatform : MonoBehaviour
 {
     playerMovement playerScript;
     public string direction;
+    public string compass;
     public Transform centerTransform;
     
     // Start is called before the first frame update

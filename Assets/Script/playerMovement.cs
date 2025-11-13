@@ -6,6 +6,7 @@ public class playerMovement : MonoBehaviour
 {
     [Header("Movement")]
     public float forwardSpeed; //constant forward speed      
+    public float testingSpeed;
     public float laneChangeSpeed = 10f; //how quickly we move sideway;
     public float maxHorizontalOffset = 3f; // Limit for left/right movement
     private float horizontalInput; // from mouse or keyboard
@@ -16,6 +17,11 @@ public class playerMovement : MonoBehaviour
     private float speedRot = 360f;                // deg/sec rotation speed
     private float nextBasePosition;
     private Transform platformTransform;
+
+    //direction holder
+    public enum CompassDir { North, East, South, West }
+    public CompassDir currentDir = CompassDir.North;
+    public bool invertInputs = false;
 
     //know if movement on x or z
     bool xActivated = true;
@@ -38,6 +44,16 @@ public class playerMovement : MonoBehaviour
     private bool sliding;
     private Animator playerAnimation;
 
+    [Header("mobile control")]
+    // Swipe detection
+    private Vector2 startTouchPos;
+    private Vector2 currentTouchPos;
+    private bool stopTouch = false;
+
+    [Header("Swipe Settings")]
+    public float swipeRange = 50f; // Minimum distance in pixels to count as a swipe
+    public float tapRange = 10f;   // To prevent tap from counting as a swipe
+
 
 
 
@@ -51,21 +67,37 @@ public class playerMovement : MonoBehaviour
 
     void Update()
     {
-        //make the horzontal input mouse instead of keyboard
+#if UNITY_STANDALONE || UNITY_EDITOR
+        // Use mouse movement on PC
         float mouseX = (Input.mousePosition.x / (float)Screen.width) * 2f - 1f;
         horizontalInput = Mathf.Clamp(mouseX, -1f, 1f);
+        if (invertInputs)
+        {
+            horizontalInput = -horizontalInput;
+        }
+#else
+    // Use accelerometer on mobile
+    Vector3 tilt = Input.acceleration;
+    horizontalInput = Mathf.Clamp(tilt.x * 2f, -1f, 1f); // multiply to adjust sensitivity
+#endif
 
         // A or D to turn. Can only happen when trigger collider at the choose point 
         if (isWaitingForTurnInput)
         {
+#if UNITY_STANDALONE || UNITY_EDITOR
             if (allowLeftTurn && Input.GetKeyDown(KeyCode.A))
             {
+                currentDir = (CompassDir)(((int)currentDir + 3) % 4);
                 StartTurn(-90f); // left
             }
             else if (allowRightTurn && Input.GetKeyDown(KeyCode.D))
             {
+                currentDir = (CompassDir)(((int)currentDir + 1) % 4);
                 StartTurn(90f); // right
             }
+#else
+    DetectSwipe(); // Only run on phone
+#endif
         }
         //check if player jump
         Jump();
@@ -103,7 +135,7 @@ public class playerMovement : MonoBehaviour
                 basePosition = nextBasePosition;
 
                 // Snap the player axis 
-                if (xActivated)
+                if (currentDir == CompassDir.North || currentDir == CompassDir.South)
                 {
                     transform.position = new Vector3(basePosition, transform.position.y, transform.position.z);
                 }
@@ -126,9 +158,8 @@ public class playerMovement : MonoBehaviour
         Vector3 forwardDisp = transform.forward * forwardSpeed * Time.fixedDeltaTime;
         if(!turning)
         {
-
             // x or z movement
-            if (xActivated)
+            if (currentDir == CompassDir.North || currentDir == CompassDir.South)
             {
                 float unclampedTargetX = transform.position.x + horizontalInput * laneChangeSpeed * Time.fixedDeltaTime;
                 float clampedTargetX = Mathf.Clamp(unclampedTargetX, basePosition - maxHorizontalOffset, basePosition + maxHorizontalOffset);
@@ -147,6 +178,17 @@ public class playerMovement : MonoBehaviour
                 rb.MovePosition(targetPos);
             }
         }
+    }
+    private void InvertInputs()
+    {
+        switch (currentDir)
+        {
+            case CompassDir.North: invertInputs = false; break;
+            case CompassDir.East: invertInputs = true; break;
+            case CompassDir.South: invertInputs = true; break;
+            case CompassDir.West: invertInputs = false; break;
+        }
+
     }
     private void Jump()
     {
@@ -230,23 +272,78 @@ public class playerMovement : MonoBehaviour
     // Turning player 
     private void StartTurn(float turnAngle)
     {
+        InvertInputs();
         // left or right location 
         Vector3 currentEuler = transform.eulerAngles;
         currentEuler.y += turnAngle;
         targetRotation = Quaternion.Euler(currentEuler);
 
         // new base position
-        if (xActivated)
+        if (currentDir == CompassDir.East || currentDir == CompassDir.West)
+        {
             nextBasePosition = platformTransform.position.z;
+        }
         else
+        {
             nextBasePosition = platformTransform.position.x;
-
+        }
 
         turning = true;
 
         
         isWaitingForTurnInput = false;
         allowLeftTurn = allowRightTurn = false;
+    }
+
+    //turning player mobile 
+    private void DetectSwipe()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    startTouchPos = touch.position;
+                    stopTouch = false;
+                    break;
+
+                case TouchPhase.Moved:
+                    currentTouchPos = touch.position;
+                    Vector2 distance = currentTouchPos - startTouchPos;
+
+                    if (!stopTouch)
+                    {
+                        if (Mathf.Abs(distance.x) > swipeRange && Mathf.Abs(distance.y) < swipeRange / 2)
+                        {
+                            // Horizontal swipe
+                            if (distance.x < 0)
+                            {
+                                // Swipe left
+                                if (isWaitingForTurnInput && allowLeftTurn)
+                                {
+                                    StartTurn(-90f);
+                                }
+                                stopTouch = true;
+                            }
+                            else if (distance.x > 0)
+                            {
+                                // Swipe right
+                                if (isWaitingForTurnInput && allowRightTurn)
+                                {
+                                    StartTurn(90f);
+                                }
+                                stopTouch = true;
+                            }
+                        }
+                    }
+                    break;
+
+                case TouchPhase.Ended:
+                    stopTouch = true;
+                    break;
+            }
+        }
     }
 
 
