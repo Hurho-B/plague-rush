@@ -30,7 +30,7 @@ public class DropCardZone : MonoBehaviour,IDropHandler
                 float swipeSpeed = distance / cardScript.timer;
                 Debug.Log(swipeSpeed);
                 //see how long it took to drag at the end 
-                if (swipeSpeed is >= 440 and <= 800f)
+                if (swipeSpeed is >= 200 and <= 1000f)
                 {
                     //perfect time ---
                     if (cardScript != null)
