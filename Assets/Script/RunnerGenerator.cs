@@ -7,9 +7,9 @@ public class RunnerGenerator : MonoBehaviour
     public class Cell
     {
         public bool visited = false;
+        public bool inTurnRange = false;
         public bool[] status = new bool[5];
         public int[] direction = { 0, 0 };
-        public int[] grid = { 0, 0 };
     }
 
     [Header("Debug")]
@@ -21,135 +21,122 @@ public class RunnerGenerator : MonoBehaviour
     public int offset;
     [Tooltip("The chance a turn should happen when legal.")]
     public int turnWeight;
+    [Tooltip("The number of rooms that will be made empty from a turn.")]
+    public int turnBuffer;
     [Header("Prefabs")]
     [Tooltip("Used for standard path segments.")]
     public GameObject room;
     [Tooltip("Used for puzzle rooms at the end of each path.")]
     public GameObject endPiece;
 
-    List<Cell> board;
-    bool lastTurnRight = true;
-    int numOfSameTurns = 1;
-    int[] grid = { 0, 0 };
-    int pathLength;
+    private List<Cell> board = new List<Cell>();
+    private bool lastTurnRight = true;
+    private int numOfSameTurns = 1;
+    private int[] grid = { 0, 0 };
+    private int pathLength;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private int areaStartPoint;
+    private int areaEndPoint;
+
+    // Initializing variables
+    private void Awake()
     {
+        pathLength = numOfSegments * segmentLength;
+    }
+    
+    // Generates a new work area on List<Cell> board
+    public void Start()
+    {
+        areaStartPoint = board.Count;
+        areaEndPoint = board.Count + pathLength;
+        for (int i = areaStartPoint; i < areaEndPoint; i++) { board.Add(new Cell()); }
         PathGenerator();
     }
-
-    void GeneratePath()
-    {
-        int[] gridSpace = grid;
-        for (int i = 0; i < pathLength; i++)
-        {
+    
+    private void GeneratePath() {
+        for (int i = areaStartPoint; i < areaEndPoint; i++) {
             // Build room segments
             Cell currentCell = board[i];
-            RoomBehaviour newRoom = Instantiate(room, new Vector3(gridSpace[0] * offset, 0, gridSpace[1] * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
+            RoomBehaviour newRoom = Instantiate(room, new Vector3(grid[0] * offset, 0, grid[1] * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
             newRoom.UpdateRoom(currentCell.status);
             newRoom.name += " " + i;
 
             // Update grid for future cell placements
-            gridSpace[0] += currentCell.direction[0];
-            gridSpace[1] += currentCell.direction[1];
+            grid[0] += currentCell.direction[0];
+            grid[1] += currentCell.direction[1];
         }
     }
 
-    void PathGenerator()
-    {
-        // Generating the workable area, check against the board
-        // before adding a Cell to the path.
-        pathLength = numOfSegments * segmentLength;
-        board = new List<Cell>();
-        for (int i = 0; i < pathLength; i++)
-        { board.Add(new Cell()); }
-        board[0].grid = new int[] { 0, 0 };
+    private void PathGenerator() {
+        // Move the first cell initialization statements into the other functions to smooth this over
         board[0].direction = new int[] { 0, 1 };
         board[0].status[0] = true;
 
-        for (int i = 1; i < pathLength; i++)
-        {
+        for (int i = areaStartPoint; i < areaEndPoint; i++) {
+            if (i == 0) { continue; }
             var pCell = board[i - 1];
-            int[] newDir;
-
-            if (i % segmentLength == 0 && i != segmentLength)
-            { newDir = MakeTurnCheck(i); }
-            else
-            { newDir = GrabDir(i, -1); }
-
             board[i].visited = false;
-            board[i].direction = newDir;
-            board[i].grid = new int[] { pCell.grid[0] + pCell.direction[0],
-                pCell.grid[1] + pCell.direction[1] };
+            if (i % segmentLength == 0)
+            {
+                board[i].direction = MakeTurnCheck(i);
+            }
+            else
+            {
+                board[i].direction = GrabDir(i, -1);
+            }
             // board[i].status;
         }
         GeneratePath();
     }
 
-    int[] MakeTurnCheck(int cell)
-    {
+    private int[] MakeTurnCheck(int cell) {
         int[] direction = { 0, 0 };
         int[] pCell = board[cell - 1].direction;
         int doTurn = Random.Range(0, 11);
         Debug.Log("Cell " + cell + " | " +numOfSameTurns);
 
-
         // This if/else block acts as a fail-safe, checking for straight
         // paths and if a turn needs to happen in the other direction.
-        if (doTurn < turnWeight)
-        {
-            if (pCell[0] == 0)
-            {
+        if (doTurn < turnWeight) {
+            if (pCell[0] == 0) {
                 board[cell].status[0] = true;
                 board[cell].status[2] = true;
             }
-            else if (pCell[1] == 0)
-            {
+            else if (pCell[1] == 0) {
                 board[cell].status[1] = true;
                 board[cell].status[3] = true;
             }
             return pCell;
         }
-        else if (lastTurnRight && numOfSameTurns >= 2)
-        {
+        board[cell].inTurnRange = true;
+        if (lastTurnRight && numOfSameTurns >= 2) {
             lastTurnRight = false;
             numOfSameTurns = 1;
             return GrabDir(cell, 0);
         }
-        else if (!lastTurnRight && numOfSameTurns >= 2)
-        {
+        else if (!lastTurnRight && numOfSameTurns >= 2) {
             lastTurnRight = true;
             numOfSameTurns = 1;
             return GrabDir(cell, 1);
         }
 
-        // This block is now doing coin flips to see which turn to make
-        // and modify the appropriate variables for tracking.
-        // 0 = Turn Left
-        // 1 = Turn Right
+        // 0 = Turn Left | 1 = Turn Right
         doTurn = Random.Range(0, 2);
-        if (doTurn == 0)
-        {
-            if (lastTurnRight == false)
-            {
+        if (doTurn == 0) {
+            if (lastTurnRight == false) {
                 numOfSameTurns += 1;
             }
-            else
-            {
+            else {
                 lastTurnRight = false;
                 numOfSameTurns = 1;
             }
             return GrabDir(cell, 0);
         }
-        else if (doTurn == 1)
-        {
-            if (lastTurnRight == true)
-            {
+        else if (doTurn == 1) {
+            if (lastTurnRight == true) {
                 numOfSameTurns += 1;
             }
-            else
-            {
+            else {
                 lastTurnRight = true;
                 numOfSameTurns = 1;
             }
@@ -159,7 +146,7 @@ public class RunnerGenerator : MonoBehaviour
         return direction;
     }
     
-    int[] GrabDir(int cell, int turnDir)
+    private int[] GrabDir(int cell, int turnDir)
     {
         int[] newDir = { 0, 0 };
         int[] pDir = board[cell - 1].direction;
@@ -257,6 +244,18 @@ public class RunnerGenerator : MonoBehaviour
             }
         }
         return newDir;
+    }
+
+    private void DeclareObiStatus()
+    {
+        for (int i = 0; i < board.Count; i++) {
+            if (board[i].inTurnRange == true) {
+                continue;
+            }
+            
+        }
+        // Check local cells relative to turnBuffer to determine if an
+        // obstacle pack is allowed to spawn in that room.
     }
 }
 
