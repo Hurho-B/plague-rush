@@ -15,18 +15,29 @@ public class ClickDetector : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0)) // Left click
         {
-            Ray ray = camera1.ScreenPointToRay(Input.mousePosition);
+            HandleClick(Input.mousePosition);
+        }
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
+        // --- Android (Touch) ---
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            HandleClick(Input.GetTouch(0).position);
+        }
+    }
+
+    void HandleClick(Vector3 screenPosition)
+    {
+        Ray ray = camera1.ScreenPointToRay(screenPosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            Debug.Log("Clicked on: " + hit.collider.gameObject.name);
+
+            // Example: if object has a custom script
+            ClickableObject clickable = hit.collider.GetComponent<ClickableObject>();
+            if (clickable != null)
             {
-                Debug.Log("Clicked on: " + hit.collider.gameObject.name);
-
-                // Example: if object has a custom script
-                ClickableObject clickable = hit.collider.GetComponent<ClickableObject>();
-                if (clickable != null)
-                {
-                    clickable.OnClicked();
-                }
+                clickable.OnClicked();
             }
         }
     }
