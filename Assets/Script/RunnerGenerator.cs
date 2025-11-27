@@ -8,7 +8,7 @@ public class RunnerGenerator : MonoBehaviour
     {
         public bool visited = false;
         public bool inTurnRange = false;
-        public bool[] status = new bool[5];
+        public bool[] status = new bool[6];
         public int[] direction = { 0, 0 };
     }
 
@@ -68,12 +68,14 @@ public class RunnerGenerator : MonoBehaviour
     }
 
     private void PathGenerator() {
-        // Move the first cell initialization statements into the other functions to smooth this over
-        board[0].direction = new int[] { 0, 1 };
-        board[0].status[0] = true;
-
         for (int i = areaStartPoint; i < areaEndPoint; i++) {
-            if (i == 0) { continue; }
+            if (i == 0)
+            {
+                board[i].visited = false;
+                board[i].direction = new int[] { 0, 1 };
+                board[i].status[0] = true;
+                continue;
+            }
             var pCell = board[i - 1];
             board[i].visited = false;
             if (i % segmentLength == 0)
@@ -84,7 +86,6 @@ public class RunnerGenerator : MonoBehaviour
             {
                 board[i].direction = GrabDir(i, -1);
             }
-            // board[i].status;
         }
         GeneratePath();
     }
