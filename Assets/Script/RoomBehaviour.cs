@@ -10,6 +10,8 @@ public class RoomBehaviour : MonoBehaviour
     // These are used to determine when to delete a room.   
     private bool visited = false;
     private bool occupied = false;
+    private bool lastCellInArea = false;
+    private RunnerGenerator runnerGenerator;
     private GameObject[] obstaclePack;
 
     // direction { x, z}
@@ -22,24 +24,10 @@ public class RoomBehaviour : MonoBehaviour
 
     public void Start()
     {
+        
         // obstaclePack = GameObject.FindGameObjectsWithTag("ObstaclePack");
     }
-
-    private void FixedUpdate() {
-        if (visited && !occupied) { Destroy(gameObject, 1); }
-    }
     
-    private void OnTriggerEnter(Collider other) {
-        if(other.gameObject.tag == "Player") {
-            visited = true;
-            occupied = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other) {
-        if (other.gameObject.tag == "Player") { occupied = false; }
-    }
-
     /*
     Status Key
     0-3 = Walls
@@ -50,6 +38,33 @@ public class RoomBehaviour : MonoBehaviour
     {
         for (int i = 0; i < 4; i++) { walls[i].SetActive(!status[i]); }
         turnCorner.SetActive(status[4]);
+        if (status[5])
+        {
+            lastCellInArea = true;
+            runnerGenerator = GameObject.Find("/Generator").GetComponent<RunnerGenerator>();
+        }
+    }
+
+    private void FixedUpdate() {
+        if (visited && !occupied) {
+            Destroy(gameObject, 1);
+        }
+    }
+    
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.tag == "Player") {
+            visited = true;
+            occupied = true;
+        }
+        if (lastCellInArea) {
+            runnerGenerator.Start();
+        }
+    }
+
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.tag == "Player") {
+            occupied = false;
+        }
     }
 
     public void CityTurns()

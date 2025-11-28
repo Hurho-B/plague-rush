@@ -87,6 +87,7 @@ public class RunnerGenerator : MonoBehaviour
                 board[i].direction = GrabDir(i, -1);
             }
         }
+		board[board.Count - 1].status[5] = true;
         GeneratePath();
     }
 
