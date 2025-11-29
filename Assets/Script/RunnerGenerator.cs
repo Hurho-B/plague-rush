@@ -6,9 +6,7 @@ public class RunnerGenerator : MonoBehaviour
 {
     public class Cell
     {
-        public bool visited = false;
-        public bool inTurnRange = false;
-        public bool[] status = new bool[6];
+        public bool[] status = new bool[7];
         public int[] direction = { 0, 0 };
     }
 
@@ -58,7 +56,7 @@ public class RunnerGenerator : MonoBehaviour
             // Build room segments
             Cell currentCell = board[i];
             RoomBehaviour newRoom = Instantiate(room, new Vector3(grid[0] * offset, 0, grid[1] * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
-            newRoom.UpdateRoom(currentCell.status);
+            newRoom.UpdateRoom(currentCell.status, currentCell.direction);
             newRoom.name += " " + i;
 
             // Update grid for future cell placements
@@ -71,13 +69,10 @@ public class RunnerGenerator : MonoBehaviour
         for (int i = areaStartPoint; i < areaEndPoint; i++) {
             if (i == 0)
             {
-                board[i].visited = false;
                 board[i].direction = new int[] { 0, 1 };
                 board[i].status[0] = true;
                 continue;
             }
-            var pCell = board[i - 1];
-            board[i].visited = false;
             if (i % segmentLength == 0)
             {
                 board[i].direction = MakeTurnCheck(i);
@@ -88,6 +83,7 @@ public class RunnerGenerator : MonoBehaviour
             }
         }
 		board[board.Count - 1].status[5] = true;
+		DeclareObiStatus();
         GeneratePath();
     }
 
@@ -110,7 +106,7 @@ public class RunnerGenerator : MonoBehaviour
             }
             return pCell;
         }
-        board[cell].inTurnRange = true;
+        board[cell].status[6] = true;
         if (lastTurnRight && numOfSameTurns >= 2) {
             lastTurnRight = false;
             numOfSameTurns = 1;
@@ -148,9 +144,8 @@ public class RunnerGenerator : MonoBehaviour
         return direction;
     }
     
-    private int[] GrabDir(int cell, int turnDir)
-    {
-        int[] newDir = { 0, 0 };
+    private int[] GrabDir(int cell, int turnDir) {
+    	int[] newDir = { 0, 0 };
         int[] pDir = board[cell - 1].direction;
 
         // First check if the cell is going along the North/South
@@ -248,16 +243,15 @@ public class RunnerGenerator : MonoBehaviour
         return newDir;
     }
 
-    private void DeclareObiStatus()
-    {
-        for (int i = 0; i < board.Count; i++) {
-            if (board[i].inTurnRange == true) {
-                continue;
-            }
-            
+    private void DeclareObiStatus() {
+    	for (int i = areaStartPoint; i < areaEndPoint; i += 5) {
+            if (board[i].status[6] == false) { 
+				continue;
+			}
+			for (int j = i - 2; j <= (i + 2); j = j + 5) {
+				board[j].status[6] = true;
+			}
         }
-        // Check local cells relative to turnBuffer to determine if an
-        // obstacle pack is allowed to spawn in that room.
-    }
-}
+	}
 
+}
