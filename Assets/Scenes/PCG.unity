@@ -302,9 +302,10 @@ MonoBehaviour:
   extraGravity: 20
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   groundCheck: {fileID: 1061401033}
   groundCheckRadius: 0.15
+  playerAnimation: {fileID: 969406646}
   swipeRange: 50
   tapRange: 10
 --- !u!4 &969406645

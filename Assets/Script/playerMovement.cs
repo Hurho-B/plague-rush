@@ -42,7 +42,7 @@ public class playerMovement : MonoBehaviour
 
     [Header("Slide")]
     private bool sliding;
-    private Animator playerAnimation;
+    public Animator playerAnimation;
 
     [Header("mobile control")]
     // Swipe detection
@@ -60,7 +60,7 @@ public class playerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        playerAnimation = GetComponent<Animator>();
+       // playerAnimation = GetComponent<Animator>();
         // Start base position whichever axix needed
         basePosition = xActivated ? transform.position.x : transform.position.z;
     }
@@ -195,6 +195,7 @@ public class playerMovement : MonoBehaviour
         //Add force 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
         {
+            playerAnimation.SetTrigger("Jumping");
             //make sure y 0 for safety 
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
