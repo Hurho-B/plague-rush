@@ -6,7 +6,8 @@ public class RunnerGenerator : MonoBehaviour
 {
     public class Cell
     {
-        public bool[] status = new bool[7];
+        public bool[] status = new bool[9];
+		public bool turnRight = true;
         public int[] direction = { 0, 0 };
     }
 
@@ -106,14 +107,16 @@ public class RunnerGenerator : MonoBehaviour
             }
             return pCell;
         }
-        board[cell].status[6] = true;
+        board[cell].status[8] = true;
         if (lastTurnRight && numOfSameTurns >= 2) {
             lastTurnRight = false;
+			board[cell].status[6] = false;
             numOfSameTurns = 1;
             return GrabDir(cell, 0);
         }
         else if (!lastTurnRight && numOfSameTurns >= 2) {
             lastTurnRight = true;
+			board[cell].status[6] = true;
             numOfSameTurns = 1;
             return GrabDir(cell, 1);
         }
@@ -245,11 +248,13 @@ public class RunnerGenerator : MonoBehaviour
 
     private void DeclareObiStatus() {
     	for (int i = areaStartPoint; i < areaEndPoint; i += 5) {
-            if (board[i].status[6] == false) { 
+            if (board[i].status[8] == false) { 
 				continue;
 			}
-			for (int j = i - 2; j <= (i + 2); j = j + 5) {
-				board[j].status[6] = true;
+			board[i - 1].status[7] = true;
+			for (int j = i - 1; j <= (i + 1); j++) {
+				board[j].status[8] = true;
+				board[j].status[6] = board[i].status[6];
 			}
         }
 	}
