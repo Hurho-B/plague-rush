@@ -86,7 +86,6 @@ public class playerMovement : MonoBehaviour
         // A or D to turn. Can only happen when trigger collider at the choose point 
         if (isWaitingForTurnInput)
         {
-#if UNITY_STANDALONE || UNITY_EDITOR
             if (allowLeftTurn && Input.GetKeyDown(KeyCode.A))
             {
                 currentDir = (CompassDir)(((int)currentDir + 3) % 4);
@@ -97,9 +96,7 @@ public class playerMovement : MonoBehaviour
                 currentDir = (CompassDir)(((int)currentDir + 1) % 4);
                 StartTurn(90f); // right
             }
-#else
-    DetectSwipe(); // Only run on phone
-#endif
+
         }
         //check if player jump
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
@@ -113,7 +110,7 @@ public class playerMovement : MonoBehaviour
         }
 
 #if !UNITY_STANDALONE && !UNITY_EDITOR
-    DetectSwipeUp();
+    DetectSwipe();
 #endif
 
     }
@@ -308,52 +305,81 @@ public class playerMovement : MonoBehaviour
 
     private void DetectSwipe()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount == 0)
+            return;
+
+        Touch touch = Input.GetTouch(0);
+
+        switch (touch.phase)
         {
-            Touch touch = Input.GetTouch(0);
+            case TouchPhase.Began:
+                startTouchPos = touch.position;
+                stopTouch = false;
+                break;
 
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    startTouchPos = touch.position;
-                    stopTouch = false;
-                    break;
+            case TouchPhase.Moved:
+                currentTouchPos = touch.position;
+                Vector2 delta = currentTouchPos - startTouchPos;
 
-                case TouchPhase.Moved:
-                    currentTouchPos = touch.position;
-                    Vector2 distance = currentTouchPos - startTouchPos;
+                if (stopTouch) return;
 
-                    if (!stopTouch)
+                float absX = Mathf.Abs(delta.x);
+                float absY = Mathf.Abs(delta.y);
+
+                // ──────────────────────────────────────────────
+                // LEFT / RIGHT swipe
+                // ──────────────────────────────────────────────
+                if (absX > absY && absX > swipeRange && isWaitingForTurnInput)
+                {
+                    if (delta.x < 0)
                     {
-                        // Horizontal swipe detection
-                        if (Mathf.Abs(distance.x) > swipeRange && Mathf.Abs(distance.y) < swipeRange / 2)
+                        // left swipe
+                        if ( allowLeftTurn)
                         {
-                            if (distance.x < 0)
-                            {
-                                // Swipe left
-                                if (isWaitingForTurnInput && allowLeftTurn)
-                                {
-                                    StartTurn(-90f);
-                                }
-                                stopTouch = true;
-                            }
-                            else if (distance.x > 0)
-                            {
-                                // Swipe right
-                                if (isWaitingForTurnInput && allowRightTurn)
-                                {
-                                    StartTurn(90f);
-                                }
-                                stopTouch = true;
-                            }
+                            currentDir = (CompassDir)(((int)currentDir + 3) % 4);
+                            StartTurn(-90f);
                         }
                     }
-                    break;
+                    else
+                    {
+                        // right swipe
+                        if (allowRightTurn)
+                        {
+                            currentDir = (CompassDir)(((int)currentDir + 1) % 4);
+                            StartTurn(90f);
+                        }
+                    }
 
-                case TouchPhase.Ended:
                     stopTouch = true;
                     break;
-            }
+                }
+
+                // ──────────────────────────────────────────────
+                // UP / DOWN swipe
+                // ──────────────────────────────────────────────
+                if (absY > absX && absY > swipeRange)
+                {
+                    if (delta.y > 0)
+                    {
+                        // Up
+                        Jump();
+                    }
+                    else
+                    {
+                        // Down
+                        Slide();
+                    }
+
+                    stopTouch = true;
+                    break;
+                }
+
+                break;
+
+            case TouchPhase.Ended:
+            case TouchPhase.Canceled:
+                stopTouch = true;
+                break;
         }
     }
 
