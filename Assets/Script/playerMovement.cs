@@ -18,6 +18,8 @@ public class playerMovement : MonoBehaviour
     private float nextBasePosition;
     private Transform platformTransform;
 
+    public GameObject testting;
+
     //direction holder
     public enum CompassDir { North, East, South, West }
     public CompassDir currentDir = CompassDir.North;
@@ -100,8 +102,19 @@ public class playerMovement : MonoBehaviour
 #endif
         }
         //check if player jump
-        Jump();
-        Slide();
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
+        {
+            Jump();
+        }
+
+        if (Input.GetKeyDown(KeyCode.S) && !sliding)
+        {
+            Slide();
+        }
+
+#if !UNITY_STANDALONE && !UNITY_EDITOR
+    DetectSwipeUp();
+#endif
 
     }
 
@@ -193,8 +206,6 @@ public class playerMovement : MonoBehaviour
     private void Jump()
     {
         //Add force 
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded())
-        {
             playerAnimation.SetTrigger("Jumping");
             //make sure y 0 for safety 
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
@@ -203,7 +214,7 @@ public class playerMovement : MonoBehaviour
             {
                 StoppingSlide();
             }
-        }
+        
     }
     private void GiveExtraGrav()// make the jumping feel good  --- if not player fly 
     {
@@ -227,8 +238,7 @@ public class playerMovement : MonoBehaviour
 
     private void Slide()
     {
-        if (Input.GetKeyDown(KeyCode.S) && !sliding) 
-        {
+        
             if (!isGrounded())
             {
                 extraGravityClone = extraGravity;
@@ -242,7 +252,7 @@ public class playerMovement : MonoBehaviour
                 s.SetColliderActive(false);
             }
             StartCoroutine(SlideStop());
-        }
+        
     }
 
     IEnumerator SlideStop()
@@ -296,12 +306,12 @@ public class playerMovement : MonoBehaviour
         allowLeftTurn = allowRightTurn = false;
     }
 
-    //turning player mobile 
     private void DetectSwipe()
     {
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
+
             switch (touch.phase)
             {
                 case TouchPhase.Began:
@@ -315,9 +325,9 @@ public class playerMovement : MonoBehaviour
 
                     if (!stopTouch)
                     {
+                        // Horizontal swipe detection
                         if (Mathf.Abs(distance.x) > swipeRange && Mathf.Abs(distance.y) < swipeRange / 2)
                         {
-                            // Horizontal swipe
                             if (distance.x < 0)
                             {
                                 // Swipe left
@@ -336,6 +346,53 @@ public class playerMovement : MonoBehaviour
                                 }
                                 stopTouch = true;
                             }
+                        }
+                    }
+                    break;
+
+                case TouchPhase.Ended:
+                    stopTouch = true;
+                    break;
+            }
+        }
+    }
+
+
+    //turning player mobile 
+    private void DetectSwipeUp()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    startTouchPos = touch.position;
+                    stopTouch = false;
+                    break;
+
+                case TouchPhase.Moved:
+                    currentTouchPos = touch.position;
+                    Vector2 distance = currentTouchPos - startTouchPos;
+
+                    if (!stopTouch)
+                    {
+                        // Vertical swipe detection
+                        if (Mathf.Abs(distance.y) > swipeRange && Mathf.Abs(distance.x) < swipeRange / 2)
+                        {
+                            if (distance.y > 0)
+                            {
+                                // Swipe up -> jump
+                                Jump();
+                            }
+                            else
+                            {
+                                // Swipe down -> slide
+                                Slide();
+                            }
+
+                            stopTouch = true;
                         }
                     }
                     break;
