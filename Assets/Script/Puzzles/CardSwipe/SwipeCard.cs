@@ -116,6 +116,14 @@ public class SwipeCard : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
 
         rectMovement.anchoredPosition = startLocation;
     }
+    void Restart()
+    {
+        Debug.Log("restart");
+        rectMovement.anchoredPosition = startLocation;
+        canvasGroup.blocksRaycasts = true;
+        dragging = false;
+        timer = 0;
+    }
 
      bool Check()
      {
@@ -127,7 +135,8 @@ public class SwipeCard : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndD
         {
             
              drop = true;
-             transform.position = startPosition;
+
+            Restart();
                 //need to tell  puzzle master 
              puzzleManagerScript.FinishActivePuzzle();
             return true;

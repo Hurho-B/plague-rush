@@ -730,7 +730,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4.8034, y: 31.7711}
+  m_AnchoredPosition: {x: 4.803406, y: 31.771118}
   m_SizeDelta: {x: 90.3932, y: 163.5423}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2799440092903325853
@@ -4730,6 +4730,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   player: {fileID: 0}
+  mapScript: {fileID: 0}
   puzzleNeededFinish: 3
   puzzleActive: 0
 --- !u!114 &634042423652726325

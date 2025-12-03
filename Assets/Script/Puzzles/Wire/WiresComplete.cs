@@ -14,6 +14,8 @@ public class WiresComplete : MonoBehaviour
     [SerializeField] AudioSource wireDisconnectSound;
     [SerializeField] AudioSource puzzleCompleteSound;
 
+    private List<DragWires> wiresList = new List<DragWires>();
+
     private void Start()
     {
         puzzleManagerScript = GetComponentInParent<PuzzleManager>();
@@ -55,8 +57,18 @@ public class WiresComplete : MonoBehaviour
                 puzzleCompleteSound.Play();
             }
 
+            //reset wires 
+            foreach (DragWires wire in wiresList)
+            {
+                wire.ReturnBack(true);
+            }
+            howManyWiresCompleted = 0;
             //tell puzzle manager that it is completed 
             puzzleManagerScript.FinishActivePuzzle();
         }
+    }
+    public void PassWire(DragWires wiresG)
+    {
+        wiresList.Add(wiresG);
     }
 }

@@ -12,9 +12,20 @@ public class PuzzleStart : MonoBehaviour
     private Transform playerLocation;
     public GameObject timeline;
     public GameObject cutsceneCamera;
+    public Transform spawnPoint;
+    public MapGenerator mapScript;
 
     private void Start() //activating whichever puzzle
     {
+        mapScript = GameObject.Find("MapGenerator").GetComponent<MapGenerator>();
+        if (!canvas)
+        {
+            canvas = GameObject.Find("Canvas_");
+        }
+        if (!cutsceneCamera)
+        {
+            cutsceneCamera = GameObject.Find("Player");
+        }
         puzzleManagerScript = canvas.GetComponent<PuzzleManager>();
         int childCount = gameObject.transform.childCount;
         Transform[] children = new Transform[childCount];
@@ -44,6 +55,7 @@ public class PuzzleStart : MonoBehaviour
 
     void StartCutscene()
     {
+        mapScript.SpawnRandomChunk(spawnPoint);
         playerScript = player.GetComponent<playerMovement>();
         playerScript.SetIdle();
         playerScript.enabled = false;
