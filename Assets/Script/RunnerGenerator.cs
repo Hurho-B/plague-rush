@@ -87,6 +87,7 @@ public class RunnerGenerator : MonoBehaviour
             {
                 board[i].direction = new int[] { 0, 1 };
                 board[i].status[0] = true;
+				board[i].status[8] = true;
                 continue;
             }
             if (i % segmentLength == 0 && i != areaStartPoint)
