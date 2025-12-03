@@ -54,7 +54,7 @@ public class RunnerGenerator : MonoBehaviour
     
     private void GeneratePath() {
 		Cell currentCell = board[0];
-        for (int i = areaStartPoint; i < areaEndPoint - 1; i++) {
+        for (int i = areaStartPoint; i < areaEndPoint; i++) {
             // Build room segments
             currentCell = board[i];
             RoomBehaviour newRoom = Instantiate(room, new Vector3(grid[0] * offset, 0, grid[1] * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
