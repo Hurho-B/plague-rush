@@ -264,7 +264,7 @@ public class RunnerGenerator : MonoBehaviour
 
     private void DeclareObiStatus() {
     	for (int i = areaStartPoint; i < areaEndPoint; i += 5) {
-            if (board[i].status[8] == false) { 
+            if (i == 0 || board[i].status[8] == false) { 
 				continue;
 			}
 			board[i - 1].status[7] = true;

@@ -277,11 +277,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
       propertyPath: numOfSegments
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
       propertyPath: segmentLength
-      value: 10
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
