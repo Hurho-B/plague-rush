@@ -17,7 +17,7 @@ public class PuzzleStart : MonoBehaviour
 
     private void Start() //activating whichever puzzle
     {
-        mapScript = GameObject.Find("MapGenerator").GetComponent<MapGenerator>();
+       // mapScript = GameObject.Find("MapGenerator").GetComponent<MapGenerator>();
         if (!canvas)
         {
             canvas = GameObject.Find("Canvas_");
@@ -55,7 +55,7 @@ public class PuzzleStart : MonoBehaviour
 
     void StartCutscene()
     {
-        mapScript.SpawnRandomChunk(spawnPoint);
+      //  mapScript.SpawnRandomChunk(spawnPoint);
         playerScript = player.GetComponent<playerMovement>();
         playerScript.SetIdle();
         playerScript.enabled = false;
