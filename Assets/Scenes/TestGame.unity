@@ -443,6 +443,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2412549867060480743, guid: fffcee801f7170d46a359f9bfe9c71ee, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4298633225142497005, guid: fffcee801f7170d46a359f9bfe9c71ee, type: 3}
       propertyPath: mapScript
       value: 

@@ -57,6 +57,11 @@ public class PuzzleManager : MonoBehaviour
         puzzleActive = true;
         //for now
         puzzlePage[index].SetActive(true);
+        if (index == 4)
+        {
+            lightPuzzle lightScript = puzzlePage[index].GetComponent<lightPuzzle>();
+            lightScript.StartPuzzle();
+        }
         puzzleChosen = puzzlePage[index]; 
     }
 

@@ -67,7 +67,7 @@ public class DragFuze : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     {
         transform.SetParent(parent);
         rectTransform.anchoredPosition = startTransform;
-        canDrag = false;
+        canDrag = true;
     }
 
     public void brokenFuzeSwap()
