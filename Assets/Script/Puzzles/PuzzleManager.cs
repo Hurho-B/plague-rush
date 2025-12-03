@@ -11,6 +11,7 @@ public class PuzzleManager : MonoBehaviour
     private GameObject puzzleChosen;
 
     public GameObject player;
+    public MapGenerator mapScript;
     private GameObject playerCamera;
     private GameObject playerCameraFpp;
 
@@ -26,11 +27,12 @@ public class PuzzleManager : MonoBehaviour
     private void Start()
     {
         timerScript = gameObject.GetComponent<Timer>();
-        MixedPuzzles(puzzleObject); 
+        
     }
 
     public void startPuzzle()
     {
+        MixedPuzzles(puzzleObject);
         //start timer
         timerScript.startTimer();
         PlayerIs(false);
@@ -69,7 +71,13 @@ public class PuzzleManager : MonoBehaviour
         }
     }
      private void AllPuzzleFinish()
-    {
+     {
+        if (mapScript)
+        {
+            Debug.Log("map");
+            mapScript.Delete();
+        }
+
         timerScript.StopTimer(false);
         ClosePages();
 
@@ -85,7 +93,7 @@ public class PuzzleManager : MonoBehaviour
         //reset values
         howManyPuzzleFinish = 0;
         //2 generator for different region 
-    }
+     }
 
     public  void ClosePages()
     {

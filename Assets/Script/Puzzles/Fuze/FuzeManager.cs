@@ -36,10 +36,10 @@ public class FuzeManager : MonoBehaviour
         int i = Random.Range(0, dragScripts.Length - 1);
         dragScripts[i].canDrag = true;
         dragScripts[i].brokenFuzeSwap();
-        brokenFuzePos.anchoredPosition = dragScripts[i].GetRectTransform().anchoredPosition;
-        Vector2 pos = brokenFuzePos.anchoredPosition;
-        pos.y = ypos;
-        brokenFuzePos.anchoredPosition = pos;
+       // brokenFuzePos.anchoredPosition = dragScripts[i].GetRectTransform().anchoredPosition;
+        //Vector2 pos = brokenFuzePos.anchoredPosition;
+     //   pos.y = ypos;
+      //  brokenFuzePos.anchoredPosition = pos;
     }
 
     public void FixMove()

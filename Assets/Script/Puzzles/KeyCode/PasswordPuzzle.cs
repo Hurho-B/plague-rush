@@ -25,6 +25,11 @@ public class PasswordPuzzle : MonoBehaviour
     void Start()
     {
         puzzleManagerScript = GetComponentInParent<PuzzleManager>();
+        AssignRandomeNb();
+    }
+
+    void AssignRandomeNb()
+    {
         for (int i = 0; i < randomNumbers.Length; i++)
         {
             randomNumbers[i] = Random.Range(0, 10);
@@ -116,8 +121,18 @@ public class PasswordPuzzle : MonoBehaviour
             correctCodeSound.Play();
         }
 
+        howManyGood = 0;
+        Restart();
+
         //puzzle manager finish 
         puzzleManagerScript.FinishActivePuzzle();
+    }
+
+    public void Restart()
+    {
+        ErasePlayerNumber();
+        AssignRandomeNb();
+        canClick = true;
     }
 
     void ErasePlayerNumber()

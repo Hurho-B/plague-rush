@@ -19,6 +19,8 @@ public class lightPuzzle : MonoBehaviour
     [SerializeField] AudioSource wrongCodeSound;
 
     private PuzzleManager puzzleManagerScript;
+    int whichbuttonsave;
+    Color lastColor;
 
     // Start is called before the first frame update
     void Start()
@@ -86,7 +88,10 @@ public class lightPuzzle : MonoBehaviour
                     correctCodeSound.Play();
                 }
 
+                lightColor[whichbuttonsave].color = lastColor;
+                
                 nbTimedone = 0;
+                StartCoroutine(ShowColor());
                 puzzleManagerScript.FinishActivePuzzle();
             }
         }
@@ -105,10 +110,13 @@ public class lightPuzzle : MonoBehaviour
         }
     }
 
+
     IEnumerator showClickColor(int whichButton) // just to make it look better 
     {
         Color currentColor = lightColor[whichButton].color;
         Color startColor = currentColor;
+        lastColor = currentColor;
+        whichbuttonsave = whichButton;
         currentColor.a = 1;
         lightColor[whichButton].color = currentColor;
         yield return new WaitForSeconds(0.2f);

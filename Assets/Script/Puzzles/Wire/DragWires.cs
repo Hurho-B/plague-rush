@@ -47,11 +47,19 @@ public class DragWires : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         if (!dragInSlot)
         {
-            canvasGroup.alpha = 1f;
-            canvasGroup.blocksRaycasts = true;
-            rectTransform.position = startPosition;
-            transform.SetParent(startParent);
+            ReturnBack(false);
         }
         isDragging = false;
+    }
+    public void ReturnBack(bool theEnd)
+    {
+        if (theEnd)
+        {
+            dragInSlot = false;
+        }
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+        rectTransform.position = startPosition;
+        transform.SetParent(startParent);
     }
 }

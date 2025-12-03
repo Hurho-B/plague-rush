@@ -189,6 +189,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4421641546605185415}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4573937029962341784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5951612102514442542}
+  m_Layer: 0
+  m_Name: SpawnMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5951612102514442542
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4573937029962341784}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1.049, z: 26}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4421641546605185415}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6960645010262330568
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,6 +288,7 @@ Transform:
   - {fileID: 8864675259324512166}
   - {fileID: 6321059432735479145}
   - {fileID: 8786981826559713158}
+  - {fileID: 5951612102514442542}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &5771272884705027977
@@ -295,6 +327,8 @@ MonoBehaviour:
   canvas: {fileID: 0}
   timeline: {fileID: 8564135372407982363}
   cutsceneCamera: {fileID: 0}
+  spawnPoint: {fileID: 5951612102514442542}
+  mapScript: {fileID: 0}
 --- !u!1 &8482470796225281837
 GameObject:
   m_ObjectHideFlags: 0

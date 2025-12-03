@@ -26,6 +26,7 @@ public class DropWires : MonoBehaviour, IDropHandler
 
             // Play connect sound
             wirePageScript.OnWireConnect();
+            wirePageScript.PassWire(dragWiresScript);
             wirePageScript.WireDone();
         }
         else if (eventData.pointerDrag != null)
