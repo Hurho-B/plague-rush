@@ -26,6 +26,10 @@ public class lightPuzzle : MonoBehaviour
     void Start()
     {
         puzzleManagerScript = GetComponentInParent<PuzzleManager>();
+    }
+
+    public void StartPuzzle()
+    {
         StartCoroutine(ShowColor());
     }
 
@@ -91,7 +95,6 @@ public class lightPuzzle : MonoBehaviour
                 lightColor[whichbuttonsave].color = lastColor;
                 
                 nbTimedone = 0;
-                StartCoroutine(ShowColor());
                 puzzleManagerScript.FinishActivePuzzle();
             }
         }

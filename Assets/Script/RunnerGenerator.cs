@@ -53,9 +53,10 @@ public class RunnerGenerator : MonoBehaviour
     }
     
     private void GeneratePath() {
+		Cell currentCell = board[0];
         for (int i = areaStartPoint; i < areaEndPoint; i++) {
             // Build room segments
-            Cell currentCell = board[i];
+            currentCell = board[i];
             RoomBehaviour newRoom = Instantiate(room, new Vector3(grid[0] * offset, 0, grid[1] * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
             newRoom.UpdateRoom(currentCell.status, currentCell.direction);
             newRoom.name += " " + i;
@@ -64,6 +65,20 @@ public class RunnerGenerator : MonoBehaviour
             grid[0] += currentCell.direction[0];
             grid[1] += currentCell.direction[1];
         }
+
+		int[] direction = currentCell.direction;
+        Quaternion orientation = Quaternion.Euler(0, 0, 0);
+		if (direction[1] == 0) {
+            if (direction[0] == 1) orientation = Quaternion.Euler(0, 270, 0);
+            else if (direction[0] != 1) orientation = Quaternion.Euler(0,  90, 0);
+        }
+        else {
+            if (direction[1] != 1) orientation = Quaternion.Euler(0, 180, 0);
+        }
+        PuzzleBehavior puzzleRoom = Instantiate(endPiece, new Vector3(grid[0] * offset, 0, grid[1] * offset), orientation, transform).GetComponent<PuzzleBehavior>();
+		
+		if (direction[0] == 0) grid[1] += direction[1] * 2;
+        else if (direction[1] == 0) grid[0] += direction[0] * 2;
     }
 
     private void PathGenerator() {
@@ -72,9 +87,10 @@ public class RunnerGenerator : MonoBehaviour
             {
                 board[i].direction = new int[] { 0, 1 };
                 board[i].status[0] = true;
+				board[i].status[8] = true;
                 continue;
             }
-            if (i % segmentLength == 0)
+            if (i % segmentLength == 0 && i != areaStartPoint)
             {
                 board[i].direction = MakeTurnCheck(i);
             }
@@ -248,7 +264,7 @@ public class RunnerGenerator : MonoBehaviour
 
     private void DeclareObiStatus() {
     	for (int i = areaStartPoint; i < areaEndPoint; i += 5) {
-            if (board[i].status[8] == false) { 
+            if (i == 0 || board[i].status[8] == false) { 
 				continue;
 			}
 			board[i - 1].status[7] = true;

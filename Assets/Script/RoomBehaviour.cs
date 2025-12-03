@@ -272,7 +272,7 @@ Status Key
     {
         int drawOfTheCard = Random.Range(0, obstaclePack.Length);
         Quaternion orientation = Quaternion.Euler(0, 0, 0);
-        if (direction[0] == 0) {
+        if (direction[1] == 0) {
             if (direction[0] == 1) orientation = Quaternion.Euler(0, 270, 0);
             else if (direction[0] != 1) orientation = Quaternion.Euler(0,  90, 0);
         }
