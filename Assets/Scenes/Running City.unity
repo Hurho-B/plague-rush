@@ -11571,6 +11571,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7652077656404105998, guid: fffcee801f7170d46a359f9bfe9c71ee, type: 3}
   m_PrefabInstance: {fileID: 3896857285810392331}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2136811721 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4298633225142497005, guid: fffcee801f7170d46a359f9bfe9c71ee, type: 3}
+  m_PrefabInstance: {fileID: 3896857285810392331}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2136811713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1111c64331d2eaa4bacf5b9cd78baddb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3896857285810392331
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11603,6 +11614,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas_
       objectReference: {fileID: 0}
+    - target: {fileID: 6935341761575069552, guid: fffcee801f7170d46a359f9bfe9c71ee, type: 3}
+      propertyPath: puzzleManagerScript
+      value: 
+      objectReference: {fileID: 2136811721}
     - target: {fileID: 6952499125803424740, guid: fffcee801f7170d46a359f9bfe9c71ee, type: 3}
       propertyPath: m_IsActive
       value: 0

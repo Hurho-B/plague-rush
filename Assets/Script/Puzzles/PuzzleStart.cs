@@ -45,23 +45,25 @@ public class PuzzleStart : MonoBehaviour
     void StartCutscene()
     {
         playerScript = player.GetComponent<playerMovement>();
+        playerScript.SetIdle();
         playerScript.enabled = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
 
         cutsceneCamera.SetActive(true);
-        timeline.SetActive(true);
+      //  timeline.SetActive(true);
+ 
         StartCoroutine(PuzzleStarting());
     }
 
     IEnumerator PuzzleStarting()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.5f);
         player.transform.position = playerLocation.position;
         puzzleManagerScript.player = player;
         puzzleManagerScript.puzzlePosition = spawnLocation;
         puzzleManagerScript.startPuzzle();
-        timeline.SetActive(false);
+      //  timeline.SetActive(false);
         this.gameObject.SetActive(false);
     }
 }
