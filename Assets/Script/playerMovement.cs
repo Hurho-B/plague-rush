@@ -62,11 +62,18 @@ public class playerMovement : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+       
+
        // playerAnimation = GetComponent<Animator>();
         // Start base position whichever axix needed
         basePosition = xActivated ? transform.position.x : transform.position.z;
     }
 
+    private void Start()
+    {
+        SetMovement();
+    }
     void Update()
     {
 #if UNITY_STANDALONE || UNITY_EDITOR
@@ -383,6 +390,14 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+   public void SetIdle()
+    {
+        playerAnimation.SetBool("IsIdle", true);
+    }
+    public void SetMovement()
+    {
+        playerAnimation.SetBool("IsIdle", false);
+    }
 
     //turning player mobile 
     private void DetectSwipeUp()
@@ -431,131 +446,5 @@ public class playerMovement : MonoBehaviour
     }
 
 
-    //swipe movement if change to subway surfer
-    /*  private void FixedUpdate()   subway surfer movement
-      {
-          if (!MovementStopTest)
-          {
-              Vector3 moveDir = transform.forward; 
-
-              Vector3 velocity = moveDir * forwardSpeed;
-              velocity.y = rb.velocity.y; // preserve vertical velocity for gravity/jumping
-
-              // Sideways movement
-              if (isMovingSideways)
-              {
-                  float delta = 0f;
-                  if (xActivated)
-                      delta = targetOffsets - transform.position.x;
-                  else
-                      delta = targetOffsets - transform.position.z;
-
-                  float move = Mathf.Clamp(delta, -laneChangeSpeed * Time.fixedDeltaTime, laneChangeSpeed * Time.fixedDeltaTime);
-
-                  if (xActivated)
-                      velocity.x = move / Time.fixedDeltaTime;
-                  else
-                      velocity.z = move / Time.fixedDeltaTime;
-
-                  // Snap to target lane
-                  if (Mathf.Abs(delta) < 0.01f)
-                  {
-                      if (xActivated)
-                          transform.position = new Vector3(targetOffsets, transform.position.y, transform.position.z);
-                      else
-                          transform.position = new Vector3(transform.position.x, transform.position.y, targetOffsets);
-
-                      isMovingSideways = false;
-                  }
-              }
-
-              rb.velocity = velocity;
-          }
-          else
-          {
-              Quaternion currentRotation = rb.rotation;
-              Quaternion nextRotation = Quaternion.RotateTowards(currentRotation, targetRotation, speedRot * Time.fixedDeltaTime);
-              rb.MoveRotation(nextRotation);
-
-              if (Quaternion.Angle(currentRotation, targetRotation) < 0.1f)
-              {
-                  rb.MoveRotation(targetRotation);
-                  MovementStopTest = false;
-              }
-              rb.velocity = Vector3.zero;
-          }
-
-      }*/
-    /*  public void MoveLeft()
-      {
-          if (currentLane > 0 && !MovementStopTest)
-          {
-              currentLane--;
-              if(xActivated)
-              {
-                  Debug.Log(transform.position.z);
-                 // targetOffsets = transform.position.x;
-                  targetOffsets = basePosition + (currentLane - 1) * laneOffest;
-              }
-              else
-              {
-                  Debug.Log(transform.position.z);
-                 // targetOffsets = transform.position.z;
-                  targetOffsets = basePosition + (currentLane - 1) * laneOffest;
-              }
-              isMovingSideways = true;
-
-          }
-      }
-
-    //  public void MoveRight()
-      {
-          if (currentLane < 2 && !MovementStopTest)
-          {
-              currentLane++;
-              if (xActivated)
-              {
-                  Debug.Log("moving on the x");
-                //  targetOffsets = transform.position.x;
-                  targetOffsets = basePosition +(currentLane - 1) * laneOffest;
-              }
-              else
-              {
-                  Debug.Log("moving on the z");
-                  //targetOffsets = transform.position.z;
-                  targetOffsets = basePosition+ (currentLane - 1) * laneOffest;
-              }
-
-              isMovingSideways = true;
-          }
-      }*/
-    /*public void TurnPlayer(string direction)
-    {
-        currentLane = 1;
-        Vector3 currentEuler = transform.eulerAngles;
-        if (xActivated == true)
-        {
-            xActivated = false;
-            basePosition = transform.position.z;
-        }
-        else
-        {
-           
-            xActivated = true;
-            basePosition = transform.position.x;
-        }
-        if (direction == "L")
-        {
-            currentEuler.y -= 90f;
-        }
-        else if (direction == "R")
-        {
-            currentEuler.y += 90f;
-        }
-
-        targetRotation = Quaternion.Euler(currentEuler);
-        MovementStopTest = true;
-        
-    }*/
 
 }

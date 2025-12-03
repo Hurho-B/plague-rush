@@ -234,6 +234,7 @@ MonoBehaviour:
   testingSpeed: 70
   laneChangeSpeed: 45
   maxHorizontalOffset: 6
+  testting: {fileID: 0}
   currentDir: 0
   invertInputs: 0
   jumpForce: 14

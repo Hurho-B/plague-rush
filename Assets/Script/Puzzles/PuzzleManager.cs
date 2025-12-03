@@ -113,6 +113,7 @@ public class PuzzleManager : MonoBehaviour
         {
             playerMovement plaScript = player.GetComponent<playerMovement>();
             plaScript.enabled = true;
+            plaScript.SetMovement();
             plaScript.forwardSpeed += 3;
             playerCamera.SetActive(true);
             playerCameraFpp.SetActive(false);
