@@ -3,7 +3,12 @@ guid: 5bce2972d754ace40ab623ab08b5c73e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: PM3D_WYDS_baseMeshM1
+    second: {fileID: 2100000, guid: 609c0ead97ef6dd4db2b6f620afafa93, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
