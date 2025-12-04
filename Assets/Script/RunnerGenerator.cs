@@ -24,9 +24,9 @@ public class RunnerGenerator : MonoBehaviour
     public int turnBuffer;
     [Header("Prefabs")]
     [Tooltip("Used for standard path segments.")]
-    public GameObject room;
+    public GameObject[] room;
     [Tooltip("Used for puzzle rooms at the end of each path.")]
-    public GameObject endPiece;
+    public GameObject[] endPiece;
 
     private List<Cell> board = new List<Cell>();
     private bool lastTurnRight = true;
@@ -34,12 +34,15 @@ public class RunnerGenerator : MonoBehaviour
     private int[] grid = { 0, 0 };
     private int pathLength;
 
+    private int currentRoom;
     private int areaStartPoint;
     private int areaEndPoint;
 
     // Initializing variables
     private void Awake()
     {
+        if (room.Length != endPiece.Length) Debug.Log("Room and end piece lengths do not match, expect inconsistencies!");
+        currentRoom = 0;
         pathLength = numOfSegments * segmentLength;
     }
     
@@ -57,7 +60,7 @@ public class RunnerGenerator : MonoBehaviour
         for (int i = areaStartPoint; i < areaEndPoint; i++) {
             // Build room segments
             currentCell = board[i];
-            RoomBehaviour newRoom = Instantiate(room, new Vector3(grid[0] * offset, 0, grid[1] * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
+            RoomBehaviour newRoom = Instantiate(room[currentRoom], new Vector3(grid[0] * offset, 0, grid[1] * offset), Quaternion.identity, transform).GetComponent<RoomBehaviour>();
             newRoom.UpdateRoom(currentCell.status, currentCell.direction);
             newRoom.name += " " + i;
 
@@ -75,19 +78,23 @@ public class RunnerGenerator : MonoBehaviour
         else {
             if (direction[1] != 1) orientation = Quaternion.Euler(0, 180, 0);
         }
-        PuzzleBehavior puzzleRoom = Instantiate(endPiece, new Vector3(grid[0] * offset, 0, grid[1] * offset), orientation, transform).GetComponent<PuzzleBehavior>();
+        PuzzleBehavior puzzleRoom = Instantiate(endPiece[currentRoom], new Vector3(grid[0] * offset, 0, grid[1] * offset), orientation, transform).GetComponent<PuzzleBehavior>();
 		
 		if (direction[0] == 0) grid[1] += direction[1] * 2;
         else if (direction[1] == 0) grid[0] += direction[0] * 2;
+
+        currentRoom++;
+        if (currentRoom >= room.Length) currentRoom = 0;
     }
 
     private void PathGenerator() {
         for (int i = areaStartPoint; i < areaEndPoint; i++) {
-            if (i == 0)
+            if (i == 0 || i == 1)
             {
                 board[i].direction = new int[] { 0, 1 };
                 board[i].status[0] = true;
-				board[i].status[8] = true;
+                board[i].status[2] = true;
+                board[i].status[8] = true;
                 continue;
             }
             if (i % segmentLength == 0 && i != areaStartPoint)

@@ -68,6 +68,12 @@ public class RoomBehaviour : MonoBehaviour
             }
 			activeWalls.Add(walls[i]);
         }
+
+        /*
+         * Multiple wall variants are used if a room goes beyond the 15 unit size
+         * Decorations such as the sidewalks/facades for City_Room are an example
+         */
+        if (activeWalls[0].transform.childCount <= 1) return;
         
         bool firstWall = true;
         foreach (GameObject wall in activeWalls) {
@@ -141,119 +147,11 @@ Status Key
     		}
 		}
 	}
-
-	private void BeforeTurnRoomWall(bool[] status, int[] direction, bool firstWall, GameObject wall) {
-		if (direction[1] ==  1 &&  status[7]) {
-        	if (firstWall) {
-            	wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-        	else {
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-		}
-		else if (direction[1] == -1 &&  status[7]) {
-        	if (firstWall) {
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-        	else {
-            	wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-		}
-		else if (direction[0] ==  1 &&  status[7]) {
-        	if (firstWall) {
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-        	else {
-            	wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-		}
-	    else if (direction[0] == -1 &&  status[7]) { if (firstWall) {
-            	wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-        	else {
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-		}
-	}
-
-	private void AfterTurnRoomWall(bool[] status, int[] direction, bool firstWall, GameObject wall) {
-		if (direction[1] ==  1 && !status[7]) {
-        	if (firstWall) {
-            	wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        	}
-        	else {
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-    	}
-		else if (direction[1] == -1 && !status[7]) {
-        	if (firstWall) {
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-        	else {
-            	wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        	}
-    	}
-		else if (direction[0] ==  1 && !status[7]) {
-	        if (firstWall) {
-    	        wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        	    wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-        	else {
-            	wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        	}
-		}
-		else if (direction[0] == -1 && !status[7]) {
-			if (firstWall) {
-            	wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        	}
-        	else {
-            	wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            	wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        	}
-		}
-	}
-    
-    private void TurnRightRoomWall(GameObject wall, bool firstWall)
-    {
-        if (firstWall) {
-            wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        }
-        else {
-            wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        }
-    }
-    
-    private void TurnLeftRoomWall(GameObject wall, bool firstWall)
-    {
-        if (firstWall) {
-            wall.gameObject.transform.GetChild(0).gameObject.SetActive(false);
-            wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-        }
-        else {
-            wall.gameObject.transform.GetChild(1).gameObject.SetActive(false);
-            wall.gameObject.transform.GetChild(2).gameObject.SetActive(false);
-        }
-    }
-
+	
     private void SetFloor(bool[] status, int[] direction)
     {
         int index = 0;
+        if (floorPattern.Length > 1 && status[4]) index = 1;
         if (status[4]) index = 1;
         
         Quaternion orientation = Quaternion.Euler(0, 0, 0);

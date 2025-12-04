@@ -7402,6 +7402,30 @@ PrefabInstance:
       propertyPath: segmentLength
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
+      propertyPath: room.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
+      propertyPath: room.Array.data[0]
+      value: 
+      objectReference: {fileID: 5014622509304553406, guid: 865d7a173e6f6944fa38d5bb22efbde0, type: 3}
+    - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
+      propertyPath: room.Array.data[1]
+      value: 
+      objectReference: {fileID: 5014622509304553406, guid: 4b41e2ece6f419bd3b1ee5259ad3e280, type: 3}
+    - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
+      propertyPath: endPiece.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
+      propertyPath: endPiece.Array.data[0]
+      value: 
+      objectReference: {fileID: 5014622509304553406, guid: cc1cd5bc308ca65eb8dbe227d46d1494, type: 3}
+    - target: {fileID: 8909034752172578488, guid: 735ab59156153ab46b7a14ece27721c1, type: 3}
+      propertyPath: endPiece.Array.data[1]
+      value: 
+      objectReference: {fileID: 5014622509304553406, guid: 11c8015a3ee9f28b68a16249791d6243, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
