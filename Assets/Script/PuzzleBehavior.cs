@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class PuzzleBehavior : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    private bool visited = false;
+    private bool occupied = false;
+    
+    private void FixedUpdate() {
+        if (visited && !occupied) Destroy(gameObject, 1);
+    }
+    
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.tag == "Player") {
+            visited = true;
+            occupied = true;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnTriggerExit(Collider other) {
+        if (other.gameObject.tag == "Player") {
+            occupied = false;
+        }
     }
 }

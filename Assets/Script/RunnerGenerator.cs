@@ -41,7 +41,7 @@ public class RunnerGenerator : MonoBehaviour
     // Initializing variables
     private void Awake()
     {
-        if (room.Length != endPiece.Length) Debug.Log("Room and end piece lengths do not match, expect inconsistencies!");
+        if (room.Length != endPiece.Length) Debug.Log("Room and end piece lengths do not match, expect issues to arise!");
         currentRoom = 0;
         pathLength = numOfSegments * segmentLength;
     }
